@@ -1,0 +1,132 @@
+Z://RT.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/RT.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity RT
+-- Compiling architecture Behavioral of RT
+
+} {} {}} Z://tex_mem.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/tex_mem.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity tex_mem
+-- Compiling architecture Behavioral of tex_mem
+
+} {} {}} Z://FB.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/FB.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity FB
+-- Compiling architecture Behavioral of FB
+
+} {} {}} Z://master_tb.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/master_tb.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity master_tb
+-- Compiling architecture Behavioral of master_tb
+
+} {} {}} Z://vga_tb.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/vga_tb.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package definitions
+-- Compiling entity vga_tb
+-- Compiling architecture Behavioral of vga_tb
+
+} {} {}} Z://fpu.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/fpu.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity fpu
+-- Compiling architecture Behavioral of fpu
+
+} {} {}} Z://top.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/top.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity top
+-- Compiling architecture Behavioral of top
+
+} {} {}} Z://definitions.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/definitions.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling package definitions
+-- Compiling package body definitions
+-- Loading package definitions
+
+} {} {}} Z://model_mem.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/model_mem.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity model_mem
+-- Compiling architecture Behavioral of model_mem
+
+} {} {}} Z://CU.vhd {2 {vcom -work work -2002 -explicit -stats=none Z:/CU.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity CU
+-- Compiling architecture Behavioral of CU
+** Warning: Z:/CU.vhd(76): (vcom-1236) Shared variables must be of a protected type.
+
+
+} {} {}} Z://GS.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/GS.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity GS
+-- Compiling architecture Behavioral of GS
+
+} {} {}} Z://PC.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/PC.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity PC
+-- Compiling architecture Behavioral of PC
+
+} {} {}} Z://D.vhd {1 {vcom -work work -2002 -explicit -stats=none Z:/D.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package definitions
+-- Compiling entity D
+-- Compiling architecture Behavioral of D
+
+} {} {}}

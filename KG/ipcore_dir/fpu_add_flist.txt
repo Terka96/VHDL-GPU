@@ -1,0 +1,17 @@
+# Output products list for <fpu_add>
+_xmsgs/pn_parser.xmsgs
+fpu_add/cmodel/floating_point_v6_1_bitacc_cmodel_lin.zip
+fpu_add/cmodel/floating_point_v6_1_bitacc_cmodel_lin64.zip
+fpu_add/cmodel/floating_point_v6_1_bitacc_cmodel_nt.zip
+fpu_add/cmodel/floating_point_v6_1_bitacc_cmodel_nt64.zip
+fpu_add.asy
+fpu_add.gise
+fpu_add.ngc
+fpu_add.sym
+fpu_add.vhd
+fpu_add.vho
+fpu_add.xco
+fpu_add.xise
+fpu_add_flist.txt
+fpu_add_readme.txt
+fpu_add_xmdf.tcl

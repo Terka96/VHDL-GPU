@@ -1,0 +1,17 @@
+# Output products list for <fpu_cmp_entity>
+_xmsgs/pn_parser.xmsgs
+fpu_cmp_entity/cmodel/floating_point_v6_1_bitacc_cmodel_lin.zip
+fpu_cmp_entity/cmodel/floating_point_v6_1_bitacc_cmodel_lin64.zip
+fpu_cmp_entity/cmodel/floating_point_v6_1_bitacc_cmodel_nt.zip
+fpu_cmp_entity/cmodel/floating_point_v6_1_bitacc_cmodel_nt64.zip
+fpu_cmp_entity.asy
+fpu_cmp_entity.gise
+fpu_cmp_entity.ngc
+fpu_cmp_entity.sym
+fpu_cmp_entity.vhd
+fpu_cmp_entity.vho
+fpu_cmp_entity.xco
+fpu_cmp_entity.xise
+fpu_cmp_entity_flist.txt
+fpu_cmp_entity_readme.txt
+fpu_cmp_entity_xmdf.tcl

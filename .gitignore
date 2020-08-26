@@ -1,0 +1,25 @@
+#ignore tb output
+KG/vga_output_tb.txt
+#ignore ise files
+KG/isim/
+KG/work/
+KG/_xmsgs/
+KG/xst
+KG/*.exe
+KG/*.log
+KG/*.syr
+KG/*.html
+KG/*.wdb
+KG/*.cmd
+KG/*.ngc
+KG/*.wlf
+KG/*.cf
+KG/*.xst
+KG/*.prj
+KG/*.cmd_log
+KG/*.mpf
+
+#ignore idea files
+softSimulationRender/.idea/
+softSimulationRender/out/
+
