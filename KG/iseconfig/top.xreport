@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2020-08-26T17:58:52</DateModified>
+  <DateModified>2020-08-27T20:31:26</DateModified>
   <ModuleName>top</ModuleName>
   <SummaryTimeStamp>2020-05-12T19:27:21</SummaryTimeStamp>
-  <SavedFilePath>/home/terka/Documents/Studia/KG/iseconfig/top.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/terka/Documents/Studia/KG/</ImplementationReportsDirectory>
+  <SavedFilePath>/home/terka/Documents/Studia/VHDL-GPU/KG/iseconfig/top.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/terka/Documents/Studia/VHDL-GPU/KG/</ImplementationReportsDirectory>
   <DateInitialized>2020-05-10T16:58:49</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

@@ -3,7 +3,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
---use ieee.numeric_std.all;
+use ieee.numeric_std.all;
 --use ieee.std_logic_textio.all;
 use std.textio.all;
 use work.definitions.all;
@@ -25,59 +25,34 @@ architecture Behavioral of vga_tb is
 begin
 
 process (clk) is
-    file file_pointer: text open write_mode is "vga_output_tb.txt";
-    variable line_el: line;
+    file file_pointer: text open write_mode is "frames/0";
+	 variable l : line;
+	 variable frame : integer := 0;
 begin
     if rising_edge(clk) then
-	--report time'image(now)&":"&" "&to_bstring(vga_hsync)&" "&to_bstring(vga_vsync)&" "&to_bstring(vga_r)&" "&to_bstring(vga_g)&" "&to_bstring(vga_b);
+		if vga_vsync = '1' then
+			file_close(file_pointer);
+			frame := frame +1;
+			file_open(file_pointer,"frames/vga_f_"& integer'image(frame)&".ppm",write_mode);
+			write(l,"P3");
+			writeline(file_pointer,l);
+			write(l,"640 480 255");
+			writeline(file_pointer,l);
 
-        -- Write the time
-        write(line_el, time'image(now));
-        write(line_el, ":");
+		end if;
 
-        -- Write the hsync
-        write(line_el, " ");
-        write(line_el, to_char(vga_hsync));
-
-        -- Write the vsync
-        write(line_el, " ");
-        write(line_el, to_char(vga_vsync));
-
-        -- Write the red
-        write(line_el, " ");
-        write(line_el, to_char(vga_r(7)));
-		  write(line_el, to_char(vga_r(6)));
-		  write(line_el, to_char(vga_r(5)));
-		  write(line_el, to_char(vga_r(4)));
-		  write(line_el, to_char(vga_r(3)));
-		  write(line_el, to_char(vga_r(2)));
-		  write(line_el, to_char(vga_r(1)));
-		  write(line_el, to_char(vga_r(0)));
-
-        -- Write the green
-        write(line_el, " ");
-		  write(line_el, to_char(vga_g(7)));
-		  write(line_el, to_char(vga_g(6)));
-		  write(line_el, to_char(vga_g(5)));
-		  write(line_el, to_char(vga_g(4)));
-		  write(line_el, to_char(vga_g(3)));
-		  write(line_el, to_char(vga_g(2)));
-		  write(line_el, to_char(vga_g(1)));
-		  write(line_el, to_char(vga_g(0)));
-
-        -- Write the blue
-        write(line_el, " ");
-		  write(line_el, to_char(vga_b(7)));
-		  write(line_el, to_char(vga_b(6)));
-		  write(line_el, to_char(vga_b(5)));
-		  write(line_el, to_char(vga_b(4)));
-		  write(line_el, to_char(vga_b(3)));
-		  write(line_el, to_char(vga_b(2)));
-		  write(line_el, to_char(vga_b(1)));
-		  write(line_el, to_char(vga_b(0)));
+       
+		  write(l, to_str(vga_r));
+		  write(l, " ");
+		  write(l, to_str(vga_g));
+		  write(l, " ");
+		  write(l, to_str(vga_b));
+		  writeline(file_pointer,l);
 		  
 		  
-        writeline(file_pointer, line_el);
+		  --write(l, to_integer(unsigned(vga_r))));
+		  --write(l, 'val(to_integer(unsigned(vga_g))));
+		  --write(l, character'val(to_integer(unsigned(vga_b))));
 
     end if;
 end process;

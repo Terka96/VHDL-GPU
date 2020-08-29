@@ -18,8 +18,13 @@ KG/*.xst
 KG/*.prj
 KG/*.cmd_log
 KG/*.mpf
+KG/*.mti
+KG/*.bmm
+KG/*.lso
+KG/*.ngr
+KG/*.xmsgs
 
 #ignore idea files
 softSimulationRender/.idea/
 softSimulationRender/out/
-
+softSimulationRender/tex/

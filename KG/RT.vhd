@@ -50,6 +50,7 @@ variable sort_vert_2 : integer range 1 to 3 := 2;
 variable sort_vert_3 : integer range 1 to 3 := 3;
 variable sort_swap : integer range 1 to 3;
 variable jump : integer range 0 to 255;
+variable szkaler : std_logic_vector(17 downto 0) := "000000000000000000";				--clean uppppppp
 begin
   -- THIS IS A STATE MACHINE WRITTEN LIKE PROGRAMME WHERE STATE IS A PROGRAM COUNTER
   if rising_edge(clk) and state /= 0 then
@@ -408,6 +409,7 @@ begin
 				fpu_b_data <= reg(8);
 				fpu_operation_data <= "0100";
 				result_reg := 6;	-- delta ll
+				reg(26) := reg(8);					--ogarnij!
 			when 63 =>
 				ireg(8) := "0000000000";	--i
 				
@@ -483,7 +485,7 @@ begin
 ---------------------------------------------------------
 -- dawaj mi pixel: (reg(7),reg(8))
 ---------------------------------------------------------
-			when 75 =>	--cieniowanie
+			when 75 =>
 				fpu_a_data <= reg(9);
 				fpu_b_data <= reg(3);
 				fpu_operation_data <= "0001";
@@ -495,12 +497,34 @@ begin
 				fpu_b_data <= reg(13);
 				fpu_operation_data <= "0011";
 				result_reg := 8;	-- i * dz + p1.z						-- screen_depth = reg(8)
-			when 77 =>
+			when 77 =>	--cieniowanie
+				fpu_a_data <= reg(9);
+				fpu_b_data <= reg(6);
+				fpu_operation_data <= "0001";
+				result_reg := 12;	-- i * dl
+			when 78 =>
+				fpu_a_data <= reg(12);
+				fpu_b_data <= reg(26);
+				fpu_operation_data <= "0011";
+				result_reg := 12;	-- i * dl + p1.l
+			when 79 =>
+				fpu_a_data <= reg(12);
+				fpu_operation_data <= "1100";
+				result_reg := 12;
+			when 80 =>
+				nop := '1';
+			when 81 =>
 				pixel_data.depth := reg(8);
-				pixel_data.color := tex_color;
+				--szkaluj kolor
+				szkaler := std_logic_vector(unsigned(tex_color(23 downto 16)) * unsigned(reg(12)(9 downto 0)));
+				pixel_data.color(23 downto 16) := szkaler(15 downto 8);		--modulo 256
+				szkaler := std_logic_vector(unsigned(tex_color(15 downto 8)) * unsigned(reg(12)(9 downto 0)));
+				pixel_data.color(15 downto 8) := szkaler(15 downto 8);		--modulo 256
+				szkaler := std_logic_vector(unsigned(tex_color(7 downto 0)) * unsigned(reg(12)(9 downto 0)));
+				pixel_data.color(7 downto 0) := szkaler(15 downto 8);		--modulo 256
 				nop := '1';
 --WAIT FOR DATA POLL1
-			when 78 =>
+			when 82 =>
 				if pixel_read = '1' then
 					data_out_present <= '0';
 					nop := '1';
@@ -510,74 +534,74 @@ begin
 					jump := WAIT_FOR_DATA_POLL1;
 				end if;
 --CONTINUE FORDL1
-			when 79 =>
+			when 83 =>
 				ireg(8):= ireg(8) + 1;	--i++
 				jump := BEGIN_FORDL1;
 --CONTINUE FOR1
-			when 80 =>
+			when 84 =>
 				ireg(1) := ireg(1) + 1;
 				jump := BEGIN_FOR1;
 			---------------------------------------------------
 			--LOWER TRIANGLE
 			---------------------------------------------------
 --END IF2
-			when 81 =>
+			when 85 =>
 				if reg(27)(9 downto 0) = reg(25)(9 downto 0) then
 					jump := END_PROGRAMME;
 				else
 					nop := '1';
 				end if;
-			when 82 =>
+			when 86 =>
 				fpu_a_data <= data_in(sort_vert_2).screen_X;
 				fpu_b_data <= data_in(sort_vert_3).screen_X;
 				fpu_operation_data <= "0100";
 				result_reg := 1;
-			when 83 =>
+			when 87 =>
 				fpu_a_data <= data_in(sort_vert_2).screen_Y;
 				fpu_b_data <= data_in(sort_vert_3).screen_Y;
 				fpu_operation_data <= "0100";
 				result_reg := 2;
-			when 84 =>
-				fpu_a_data <= reg(1);
-				fpu_b_data <= reg(2);
-				fpu_operation_data <= "0010";
-				result_reg := 19;
-			when 85 =>
-				fpu_a_data <= data_in(sort_vert_2).depth;
-				fpu_b_data <= data_in(sort_vert_3).depth;
-				fpu_operation_data <= "0100";
-				result_reg := 1;
-			when 86 =>
-				fpu_a_data <= reg(1);
-				fpu_b_data <= reg(2);
-				fpu_operation_data <= "0010";
-				result_reg := 18;	
-			when 87 =>
-				fpu_a_data <= data_in(sort_vert_2).light_L;
-				fpu_b_data <= data_in(sort_vert_3).light_L;
-				fpu_operation_data <= "0100";
-				result_reg := 1;
 			when 88 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(2);
 				fpu_operation_data <= "0010";
-				result_reg := 17;	
+				result_reg := 19;
 			when 89 =>
-				fpu_a_data <= data_in(sort_vert_2).tex_U;
-				fpu_b_data <= data_in(sort_vert_3).tex_U;
+				fpu_a_data <= data_in(sort_vert_2).depth;
+				fpu_b_data <= data_in(sort_vert_3).depth;
 				fpu_operation_data <= "0100";
 				result_reg := 1;
 			when 90 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(2);
 				fpu_operation_data <= "0010";
-				result_reg := 16;	
+				result_reg := 18;	
 			when 91 =>
+				fpu_a_data <= data_in(sort_vert_2).light_L;
+				fpu_b_data <= data_in(sort_vert_3).light_L;
+				fpu_operation_data <= "0100";
+				result_reg := 1;
+			when 92 =>
+				fpu_a_data <= reg(1);
+				fpu_b_data <= reg(2);
+				fpu_operation_data <= "0010";
+				result_reg := 17;	
+			when 93 =>
+				fpu_a_data <= data_in(sort_vert_2).tex_U;
+				fpu_b_data <= data_in(sort_vert_3).tex_U;
+				fpu_operation_data <= "0100";
+				result_reg := 1;
+			when 94 =>
+				fpu_a_data <= reg(1);
+				fpu_b_data <= reg(2);
+				fpu_operation_data <= "0010";
+				result_reg := 16;	
+			when 95 =>
 				fpu_a_data <= data_in(sort_vert_2).tex_V;
 				fpu_b_data <= data_in(sort_vert_3).tex_V;
 				fpu_operation_data <= "0100";
 				result_reg := 1;
-			when 92 =>
+			when 96 =>
 				ireg(1) := "0000000000";																--i
 				ireg(2) := signed(reg(27)(9 downto 0)) - signed(reg(25)(9 downto 0));	--v2y - v3y
 				
@@ -586,7 +610,7 @@ begin
 				fpu_operation_data <= "0010";
 				result_reg := 15;	
 --BEGIN FOR2
-			when 93 =>
+			when 97 =>
 				if ireg(1) >= ireg(2) then
 					jump := END_PROGRAMME;
 				else
@@ -596,29 +620,29 @@ begin
 					fpu_operation_data <= "1101";
 					result_reg := 1;
 				end if;
-			when 94 =>
+			when 98 =>
 				fpu_a_data(9 downto 0) <= std_logic_vector(ireg(4));
 				fpu_operation_data <= "1101";
 				result_reg := 14;
-			when 95 =>
+			when 99 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(19);
 				fpu_operation_data <= "0001";
 				result_reg := 3;
-			when 96 =>
+			when 100 =>
 				fpu_a_data <= reg(3);
 				fpu_operation_data <= "1100";
 				result_reg := 3;
-			when 97 =>
+			when 101 =>
 				fpu_a_data <= reg(14);
 				fpu_b_data <= reg(24);
 				fpu_operation_data <= "0001";
 				result_reg := 4;
-			when 98 =>
+			when 102 =>
 				fpu_a_data <= reg(4);
 				fpu_operation_data <= "1100";
 				result_reg := 4;				
-			when 99 =>
+			when 103 =>
 				ireg(5) := signed(reg(28)(9 downto 0)) - signed(reg(3)(9 downto 0));		--x1 for line
 				ireg(6) := signed(reg(30)(9 downto 0)) - signed(reg(4)(9 downto 0));		--x2 for line
 				
@@ -626,77 +650,77 @@ begin
 				fpu_b_data <= reg(18);
 				fpu_operation_data <= "0001";
 				result_reg := 3;
-			when 100 =>
+			when 104 =>
 				fpu_a_data <= data_in(sort_vert_2).depth;
 				fpu_b_data <= reg(3);
 				fpu_operation_data <= "0100";
 				result_reg := 3;	--z1
-			when 101 =>
+			when 105 =>
 				fpu_a_data <= reg(14);
 				fpu_b_data <= reg(23);
 				fpu_operation_data <= "0001";
 				result_reg := 4;
-			when 102 =>
+			when 106 =>
 				fpu_a_data <= data_in(sort_vert_1).depth;
 				fpu_b_data <= reg(4);
 				fpu_operation_data <= "0100";
 				result_reg := 4;	--z2
-			when 103 =>
+			when 107 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(16);
 				fpu_operation_data <= "0001";
 				result_reg := 5;
-			when 104 =>
+			when 108 =>
 				fpu_a_data <= data_in(sort_vert_2).tex_U;
 				fpu_b_data <= reg(5);
 				fpu_operation_data <= "0100";
 				result_reg := 5;	--tu1
-			when 105 =>
+			when 109 =>
 				fpu_a_data <= reg(14);
 				fpu_b_data <= reg(21);
 				fpu_operation_data <= "0001";
 				result_reg := 6;
-			when 106 =>
+			when 110 =>
 				fpu_a_data <= data_in(sort_vert_1).tex_U;
 				fpu_b_data <= reg(6);
 				fpu_operation_data <= "0100";
 				result_reg := 6;	--tu2
-			when 107 =>
+			when 111 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(15);
 				fpu_operation_data <= "0001";
 				result_reg := 7;
-			when 108 =>
+			when 112 =>
 				fpu_a_data <= data_in(sort_vert_2).tex_V;
 				fpu_b_data <= reg(7);
 				fpu_operation_data <= "0100";
 				result_reg := 7;	--tv1
-			when 109 =>
+			when 113 =>
 				fpu_a_data <= reg(14);
 				fpu_b_data <= reg(20);
 				fpu_operation_data <= "0001";
 				result_reg := 8;
-			when 110 =>
+			when 114 =>
 				fpu_a_data <= data_in(sort_vert_1).tex_V;
 				fpu_b_data <= reg(8);
 				fpu_operation_data <= "0100";
 				result_reg := 8;	--tv2
-			when 111 =>
+			when 115 =>
 				fpu_a_data <= reg(1);
 				fpu_b_data <= reg(17);
 				fpu_operation_data <= "0001";
 				result_reg := 9;
-			when 112 =>
+			when 116 =>
 				fpu_a_data <= data_in(sort_vert_2).light_L;
 				fpu_b_data <= reg(9);
 				fpu_operation_data <= "0100";
 				result_reg := 9;	--ll1
-			when 113 =>
+			when 117 =>
 				fpu_a_data <= reg(14);
 				fpu_b_data <= reg(22);
 				fpu_operation_data <= "0001";
 				result_reg := 10;
-			when 114 =>
+			when 118 =>
 				fpu_a_data <= data_in(sort_vert_1).light_L;
 				fpu_b_data <= reg(10);
 				fpu_operation_data <= "0100";
@@ -704,51 +728,51 @@ begin
 			---------------------------------------------------
 			--DRAW LINE				free registers ir(7,8,9,10) r(11,12,13)
 			---------------------------------------------------
-			when 115 =>
+			when 119 =>
 				ireg(7) := abs(ireg(6) - ireg(5));
 				
 				fpu_a_data(9 downto 0) <= std_logic_vector(ireg(7));
 				fpu_operation_data <= "1101";
 				result_reg := 11;	--Math.abs(delta.x)
-			when 116 =>
+			when 120 =>
 				fpu_a_data <= reg(4);
 				fpu_b_data <= reg(3);
 				fpu_operation_data <= "0100";
 				result_reg := 3;	--delta z
 				reg(13) := reg(3);					--ogarnij!
-			when 117 =>
+			when 121 =>
 				fpu_a_data <= reg(3);
 				fpu_b_data <= reg(11);
 				fpu_operation_data <= "0010";
 				result_reg := 3;	--dz
-			when 118 =>
+			when 122 =>
 				fpu_a_data <= reg(6);
 				fpu_b_data <= reg(5);
 				fpu_operation_data <= "0100";
 				result_reg := 4;	-- delta tu
 				reg(31) := reg(5);					--ogarnij
-			when 119 =>
+			when 123 =>
 				fpu_a_data <= reg(4);
 				fpu_b_data <= reg(11);
 				fpu_operation_data <= "0010";
 				result_reg := 4;	--du
-			when 120 =>
+			when 124 =>
 				fpu_a_data <= reg(8);
 				fpu_b_data <= reg(7);
 				fpu_operation_data <= "0100";
 				result_reg := 5;	-- delta tv
 				reg(32) := reg(7);					--ogarnij!
-			when 121 =>
+			when 125 =>
 				fpu_a_data <= reg(5);
 				fpu_b_data <= reg(11);
 				fpu_operation_data <= "0010";
 				result_reg := 5;	--dv
-			when 122 =>
+			when 126 =>
 				fpu_a_data <= reg(10);
 				fpu_b_data <= reg(9);
 				fpu_operation_data <= "0100";
 				result_reg := 6;	-- delta ll
-			when 123 =>
+			when 127 =>
 				ireg(8) := "0000000000";	--i
 				
 				fpu_a_data <= reg(6);
@@ -757,14 +781,14 @@ begin
 				result_reg := 6;	--dl
 				
 --BEGIN FORDL2
-			when 124 =>
+			when 128 =>
 				report "FOR2 i= " & integer'image(to_integer(ireg(1))) & "FORDL2 i= " & integer'image(to_integer(ireg(8)));
 				if ireg(8) > ireg(7) then
 					jump := CONTINUE_FOR2;
 				else
 					nop := '1';
 				end if;
-			when 125 =>
+			when 129 =>
 				if ireg(6) >= ireg(5) then
 					ireg(9) := ireg(8);	--dx = 1
 				else
@@ -774,7 +798,7 @@ begin
 				fpu_a_data(9 downto 0) <= std_logic_vector(ireg(8));
 				fpu_operation_data <= "1101";
 				result_reg := 12;
-			when 126 =>
+			when 130 =>
 				ireg(9) := ireg(5) + ireg(9);							-- screen_X = ireg(9)
 				pixel_data.position.coord_X := ireg(9);
 				pixel_data.position.coord_Y := ireg(3);			-- screen_Y = ireg(3)
@@ -783,50 +807,48 @@ begin
 				else
 					nop := '1';
 				end if;
-			when 127 =>
+			when 131 =>
 				fpu_a_data <= reg(12);
 				fpu_b_data <= reg(4);
 				fpu_operation_data <= "0001";
 				result_reg := 7;	-- i * du
-			when 128 =>
+			when 132 =>
 				fpu_a_data <= reg(7);
 				fpu_b_data <= reg(31); --chyba mam to?!
 				fpu_operation_data <= "0011";
 				result_reg := 7;	-- i * du + tx1u
-			when 129 =>
+			when 133 =>
 				fpu_a_data <= reg(7);
 				fpu_b_data <= TEX_SIZE;
 				fpu_operation_data <= "0001";
 				result_reg := 7;	
-			when 130 =>
+			when 134 =>
 				fpu_a_data <= reg(7);
 				fpu_operation_data <= "1100";
 				result_reg := 7;	-- tex_coord_X
-			when 131 =>
+			when 135 =>
 				fpu_a_data <= reg(12);
 				fpu_b_data <= reg(5);
 				fpu_operation_data <= "0001";
 				result_reg := 8;	-- i * dv
-			when 132 =>
+			when 136 =>
 				fpu_a_data <= reg(8);
 				fpu_b_data <= reg(32);	--chyba mam to?!
 				fpu_operation_data <= "0011";
 				result_reg := 8;	-- i * dv + tx1v
-			when 133 =>
+			when 137 =>
 				fpu_a_data <= reg(8);
 				fpu_b_data <= TEX_SIZE;
 				fpu_operation_data <= "0001";
 				result_reg := 8;
-			when 134 =>
+			when 138 =>
 				fpu_a_data <= reg(8);
 				fpu_operation_data <= "1100";
 				result_reg := 8;	-- tex_coord_Y
 ---------------------------------------------------------
 -- dawaj mi pixel: (reg(7),reg(8))
 ---------------------------------------------------------
-			--faktycznie to trzeba by chyba policzyć dz jako reg(4) - reg(3)
-
-			when 135 =>	--cieniowanie
+			when 139 =>
 				fpu_a_data <= reg(12);
 				fpu_b_data <= reg(3);
 				fpu_operation_data <= "0001";
@@ -834,17 +856,37 @@ begin
 				
 				tex_coord_x <= signed("0000011111" and reg(7)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
 				tex_coord_y <= signed("0000011111" and reg(8)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
-			when 136 =>
+			when 140 =>
 				fpu_a_data <= reg(13);	--chyba mam to?!
 				fpu_b_data <= reg(9);
 				fpu_operation_data <= "0011";
 				result_reg := 9;	-- i * dz + p1.z						-- screen_depth = reg(9)
-			when 137 =>
+			when 141 =>	--cieniowanie
+				fpu_a_data <= reg(12);
+				fpu_b_data <= reg(6);
+				fpu_operation_data <= "0001";
+				result_reg := 10;	-- i * dl
+			when 142 =>
+				fpu_a_data <= reg(10);
+				fpu_b_data <= reg(26);
+				fpu_operation_data <= "0011";
+				result_reg := 10;	-- i * dl + p1.l
+			when 143 =>
+				fpu_a_data <= reg(10);
+				fpu_operation_data <= "1100";
+				result_reg := 10;
+			when 144 =>
 				pixel_data.depth := reg(9);
-				pixel_data.color := tex_color;							--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! check if rd!
+				szkaler := std_logic_vector(unsigned(tex_color(23 downto 16)) * unsigned(reg(10)(9 downto 0)));
+				pixel_data.color(23 downto 16) := szkaler(15 downto 8);		--modulo 256
+				szkaler := std_logic_vector(unsigned(tex_color(15 downto 8)) * unsigned(reg(10)(9 downto 0)));
+				pixel_data.color(15 downto 8) := szkaler(15 downto 8);		--modulo 256
+				szkaler := std_logic_vector(unsigned(tex_color(7 downto 0)) * unsigned(reg(10)(9 downto 0)));
+				pixel_data.color(7 downto 0) := szkaler(15 downto 8);		--modulo 256
+																																				--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! check if rd!
 				nop := '1';
 --WAIT FOR DATA POLL2
-			when 138 =>
+			when 145 =>
 				if pixel_read = '1' then
 					data_out_present <= '0';
 					nop := '1';
@@ -854,15 +896,15 @@ begin
 					jump := WAIT_FOR_DATA_POLL2;
 				end if;
 --CONTINUE FORDL2
-			when 139 =>
+			when 146 =>
 				ireg(8):= ireg(8) + 1;	--i++
 				jump := BEGIN_FORDL2;
 --CONTINUE FOR2
-			when 140 =>
+			when 147 =>
 				ireg(1) := ireg(1) + 1;
 				jump := BEGIN_FOR2;
 --END PROGRAMME
-			when 141 =>
+			when 148 =>
 				sort_vert_1 := 1;
 				sort_vert_2 := 2;
 				sort_vert_3 := 3;

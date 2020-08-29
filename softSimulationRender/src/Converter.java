@@ -2,20 +2,14 @@ import java.util.ArrayList;
 
 public class Converter {
     public static void main(String[] args) {
-        //String x = "x\""+Integer.toHexString(f32tof16(160.0f) & 0xffff)+"\"";
-        //String y = "x\""+Integer.toHexString(f32tof16(-120.0f) & 0xffff)+"\"";
+        //String x = "x\""+Integer.toHexString(f32tof16(320.0f) & 0xffff)+"\"";
+        //String y = "x\""+Integer.toHexString(f32tof16(-240.0f) & 0xffff)+"\"";
         //System.out.println("X: "+x+" Y: "+y);
-        exportMatrix();
+        //exportMatrix();
+        //System.out.println(light_dir_to_norm(new Point3f(2.0f,0.3f,3.0f)));
         //exportbmp("tex.bmp",64);
-        //exportObj("cube");
+        exportObj("cuptex.obj");
 
-        //Perspective perspective = new Perspective();
-        //perspective.calculateProjectionMatrix(new Point3f(0.0f,0.0f,4.0f),new Point3f(0.0f,0.0f,0.0f),40.0f);
-        //Point3f res = perspective.projectPoint(new Point3f(-1,-1,-1));
-        //System.out.println(res);
-
-        //String x = "x\""+Integer.toHexString(f32tof16(63.0f) & 0xffff)+"\"";
-        //System.out.println(x);
     }
 
     private static void exportbmp(String file,int texSize){
@@ -31,8 +25,8 @@ public class Converter {
 
     private static void exportMatrix(){
         Perspective p = new Perspective();
-        p.calculateProjectionMatrix(new Point3f(0.0f,0.3f,6.0f),new Point3f(0.0f,1.0f,0.0f),60.0f);
-        //p.calculateProjectionMatrix(new Point3f(0.5f,0.0f,5.0f),new Point3f(0.0f,2.4f,0.0f),60.0f);
+        p.calculateProjectionMatrix(new Point3f(2.0f,0.3f,3.0f),new Point3f(0.0f,-0.6f,0.0f),10.0f); //cuptex
+        //p.calculateProjectionMatrix(new Point3f(4.0f,3.0f,6.0f),new Point3f(0.0f,-0.5f,0.0f),60.0f); //cube
         //float[][] w2c = p.getWorld2CamMatrix();
         float[][] pp = p.getProjectionMatrix();
 
@@ -98,5 +92,13 @@ public class Converter {
         int m = (i & 0x007FE000) >> 13; //mantis
 
         return (short)((s|e1|e2|m) & 0xFFFF);
+    }
+
+    private static String light_dir_to_norm(Point3f lightDir){
+        float lightDist = (float)Math.sqrt(lightDir.x*lightDir.x+lightDir.y*lightDir.y+lightDir.z*lightDir.z);
+        String lx = floatToStr(lightDir.x/lightDist);
+        String ly = floatToStr(lightDir.y/lightDist);
+        String lz = floatToStr(lightDir.z/lightDist);
+        return lx + " "+ly+ " "+lz;
     }
 }

@@ -68,7 +68,7 @@ if rising_edge(clk) then
 	case fbstate is
 		when CLEAR_BUF =>
 			frame_buf(cur_Y)(cur_X) := (("0000000000","0000000000"),x"000000",x"7c00");
-			if cur_X = (SCREEN_WIDTH - 1) and cur_Y = (screen_HEIGHT - 1) then
+			if cur_X = (SCREEN_WIDTH - 1) and cur_Y = (SCREEN_HEIGHT - 1) then
 				fbstate := WAIT_FOR_DATA;
 			end if;
 		when WAIT_FOR_DATA =>
@@ -102,14 +102,13 @@ if rising_edge(clk) then
 		end if;
 	end if;
 	
-	if cur_Y = 1 then
-		vga_vsync <= '1';
-	else
-		vga_vsync <= '0';
-	end if;
 	if cur_X = 1 then
 		vga_hsync <= '1';
+		if cur_Y = 1 then
+			vga_vsync <= '1';
+		end if;
 	else
+		vga_vsync <= '0';
 		vga_hsync <= '0';
 	end if;
 	vga_r <= frame_buf(cur_Y)(cur_X).color(23 downto 16);

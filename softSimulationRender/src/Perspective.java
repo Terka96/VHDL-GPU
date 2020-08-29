@@ -10,7 +10,7 @@ public class Perspective {
         world2CamMatrix[0][0] = (float)Math.cos(camAngle.y);
         world2CamMatrix[0][1] = 0.0f;
         world2CamMatrix[0][2] = (float)Math.sin(camAngle.y);
-        world2CamMatrix[0][3] = -camPos.x; //CAM ROT: -camPos.getX()*(float)Math.cos(camAngle.getY()) - (float)Math.sin(camAngle.getY())*camPos.getZ();
+        world2CamMatrix[0][3] = -camPos.x*(float)Math.cos(camAngle.y) - (float)Math.sin(camAngle.y)*camPos.z;// -camPos.x;
 
         world2CamMatrix[1][0] = 0.0f;
         world2CamMatrix[1][1] = 1.0f;
@@ -20,7 +20,7 @@ public class Perspective {
         world2CamMatrix[2][0] = -(float)Math.sin(camAngle.y);
         world2CamMatrix[2][1] = 0.0f;
         world2CamMatrix[2][2] = (float)Math.cos(camAngle.y);
-        world2CamMatrix[2][3] = -camPos.z; //CAM ROT: camPos.getZ()*(float)Math.sin(camAngle.getY()) - (float)Math.cos(camAngle.getY())*camPos.getZ();
+        world2CamMatrix[2][3] = camPos.z*(float)Math.sin(camAngle.y) - (float)Math.cos(camAngle.y)*camPos.z; //-camPos.z;
 
         world2CamMatrix[3][0] = 0.0f;
         world2CamMatrix[3][1] = 0.0f;

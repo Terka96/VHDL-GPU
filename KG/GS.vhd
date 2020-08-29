@@ -31,12 +31,13 @@ begin
 process (clk,ce) is
 variable state : integer := 0;
 variable waiting : std_logic := '0';
---variable matrix_w2c : TRANSFORM_MATRIX := (
---(x"3c00",x"0000",x"8000",x"0000"),
---(x"0000",x"3c00",x"0000",x"0000"),
---(x"0000",x"0000",x"3c00",x"0000"),
---(x"8000",x"b800",x"bc00",x"3c00")
---);
+variable light_norm_X : FLOAT16 := x"3818";
+variable light_norm_Y : FLOAT16 := x"3625";
+variable light_norm_Z : FLOAT16 := x"3a25";
+
+--variable light_norm_X : FLOAT16 := x"386c";
+--variable light_norm_Y : FLOAT16 := x"2d4e";
+--variable light_norm_Z : FLOAT16 := x"3aa2";
 
 variable matrix_w2c : TRANSFORM_MATRIX := (
 (x"3c00",x"0000",x"0000",x"8000"),
@@ -46,19 +47,27 @@ variable matrix_w2c : TRANSFORM_MATRIX := (
 );
 
 --side
+--variable matrix_pp : TRANSFORM_MATRIX := (
+--(x"3b7c",x"0000",x"3dd4",x"0000"),
+--(x"0000",x"3eed",x"0000",x"b828"),
+--(x"3abe",x"0000",x"b854",x"45cf"),
+--(x"3abb",x"0000",x"b852",x"4600")
+--);
+
+--side upper cut
 variable matrix_pp : TRANSFORM_MATRIX := (
-(x"3b7c",x"0000",x"3dd4",x"0000"),
-(x"0000",x"3eed",x"0000",x"b828"),
-(x"3abe",x"0000",x"b854",x"45cf"),
-(x"3abb",x"0000",x"b852",x"4600")
+(x"3e14",x"0000",x"baa4",x"bc64"),
+(x"0000",x"3eed",x"0000",x"c532"),
+(x"b7af",x"0000",x"bb08",x"47f5"),
+(x"b7ab",x"0000",x"bb05",x"4812")
 );
 
---cup good view
+--cup
 --variable matrix_pp : TRANSFORM_MATRIX := (
---(x"bd1b",x"0000",x"3cae",x"baed"),
---(x"0000",x"3eed",x"0000",x"0000"),
---(x"396a",x"0000",x"39e9",x"44cf"),
---(x"3967",x"0000",x"39e6",x"4500")
+--(x"48b7",x"0000",x"c674",x"37e9"),
+--(x"0000",x"49b7",x"0000",x"c2db"),
+--(x"b886",x"0000",x"ba9d",x"43f4"),
+--(x"b884",x"0000",x"ba9a",x"442b")
 --);
 
 --front
@@ -162,12 +171,12 @@ jump := 255;
 			  result_reg := 2;
 			when 14 => 
 			  fpu_a_data <= reg(2);
-			  fpu_b_data <= x"5900";		--scale to screen
+			  fpu_b_data <= SCREEN_WIDTH_F;		--scale to screen
 			  fpu_operation_data <= "0001";
 			  result_reg := 2;
 			when 15 => 
 			  fpu_a_data <= reg(2);
-			  fpu_b_data <= x"5900";		--move to center of screen
+			  fpu_b_data <= SCREEN_WIDTH_F;		--move to center of screen
 			  fpu_operation_data <= "0011";
 			  result_reg := 2;
 			--reg(1) - W
@@ -210,12 +219,12 @@ jump := 255;
 			  result_reg := 2;
 			when 23 => 
 			  fpu_a_data <= reg(2);
-			  fpu_b_data <= x"d780";
+			  fpu_b_data <= SCREEN_HEIGHT_F or x"8000";
 			  fpu_operation_data <= "0001";
 			  result_reg := 2;  
 			when 24 => 
 			  fpu_a_data <= reg(2);
-			  fpu_b_data <= x"5780";
+			  fpu_b_data <= SCREEN_HEIGHT_F;
 			  fpu_operation_data <= "0011";
 			  result_reg := 2;
 			when 25 => --Prespective.java line 82 (wyznacz Z)
@@ -254,9 +263,54 @@ jump := 255;
 			  fpu_b_data <= reg(1);
 			  fpu_operation_data <= "0010";
 			  result_reg := 2;
-			when 32 => --loop for vertices in triangle
+			--przeliczanie oświetlenia
+			when 32 =>
+				fpu_a_data <= data_in(vert).norm_X;
+				fpu_b_data <= x"5bf8";	--255
+				fpu_operation_data <= "0001";
+				result_reg := 4;
+			when 33 =>
+				fpu_a_data <= reg(4);
+				fpu_b_data <= light_norm_X;
+				fpu_operation_data <= "0001";
+				result_reg := 4;
+			when 34 =>
+				fpu_a_data <= data_in(vert).norm_Y;
+				fpu_b_data <= x"5bf8";	--255
+				fpu_operation_data <= "0001";
+				result_reg := 5;
+			when 35 =>
+				fpu_a_data <= reg(5);
+				fpu_b_data <= light_norm_Y;
+				fpu_operation_data <= "0001";
+				result_reg := 5;
+			when 36 =>
+				fpu_a_data <= reg(4);
+				fpu_b_data <= reg(5);
+				fpu_operation_data <= "0011";
+				result_reg := 4;
+			when 37 =>
+				fpu_a_data <= data_in(vert).norm_Z;
+				fpu_b_data <= x"5bf8";	--255
+				fpu_operation_data <= "0001";
+				result_reg := 5;
+			when 38 =>
+				fpu_a_data <= reg(5);
+				fpu_b_data <= light_norm_Z;
+				fpu_operation_data <= "0001";
+				result_reg := 5;
+			when 39 =>
+				fpu_a_data <= reg(5);
+				fpu_b_data <= reg(4);
+				fpu_operation_data <= "0011";
+				result_reg := 4;
+			when 40 => --loop for vertices in triangle
 			reg_proj_triangle(vert).depth := reg(2);
-			reg_proj_triangle(vert).light_L := x"0000";
+			if reg(4)(15) = '0' then
+				reg_proj_triangle(vert).light_L := reg(4);
+			else
+				reg_proj_triangle(vert).light_L := x"0000";
+			end if;
 			reg_proj_triangle(vert).tex_U := data_in(vert).tex_U;
 			reg_proj_triangle(vert).tex_V := data_in(vert).tex_V;
 			  case vert is
