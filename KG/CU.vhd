@@ -15,9 +15,9 @@ entity CU is
 		pixel_out : out PIXEL;
 		data_out_present : out std_logic;
 		pixel_read : in std_logic;
+		tex_load_en : out std_logic;
 		tex_rd : in std_logic;
-		tex_coord_x : out TEX_ADDRESS;
-		tex_coord_y : out TEX_ADDRESS;
+		tex_coord : out INT_COORDS;
 		tex_color : in COLOR24
 	);
 end CU;
@@ -52,9 +52,9 @@ component RT
 			pixel_out : out PIXEL; --data for RT
 			data_out_present : out std_logic;
 			pixel_read : in std_logic;
+			tex_load_en : out std_logic;
 			tex_rd : in std_logic;
-			tex_coord_x : out TEX_ADDRESS;
-			tex_coord_y : out TEX_ADDRESS;
+			tex_coord : out INT_COORDS;
 			tex_color : in COLOR24;
 			
 			fpu_operation_data : out std_logic_vector(3 downto 0);
@@ -121,9 +121,9 @@ begin
 		pixel_out => pixel_out,
 		data_out_present =>data_out_present,
 		pixel_read => pixel_read,
+		tex_load_en => tex_load_en,
 		tex_rd => tex_rd,
-		tex_coord_x => tex_coord_x,
-		tex_coord_y => tex_coord_y,
+		tex_coord => tex_coord,
 		tex_color => tex_color,
 		
 		fpu_operation_data => fpu_operation_data,

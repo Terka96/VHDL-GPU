@@ -11,14 +11,14 @@ public class Geometry {
     public Geometry (String fileName){
         //read file or load static points
         if(fileName.compareTo("cube")==0){
-            Point3f p1 = new Point3f(-1,1,-1);
-            Point3f p2 = new Point3f(1,1,-1);
-            Point3f p3 = new Point3f(-1,-1,-1);
-            Point3f p4 = new Point3f(1,-1,-1);
-            Point3f p5 = new Point3f(-1,1,1);
-            Point3f p6 = new Point3f(1,1,1);
-            Point3f p7 = new Point3f(-1,-1,1);
-            Point3f p8 = new Point3f(1,-1,1);
+            Point3f p1 = new Point3f(-10,10,-10);
+            Point3f p2 = new Point3f(10,10,-10);
+            Point3f p3 = new Point3f(-10,-10,-10);
+            Point3f p4 = new Point3f(10,-10,-10);
+            Point3f p5 = new Point3f(-10,10,10);
+            Point3f p6 = new Point3f(10,10,10);
+            Point3f p7 = new Point3f(-10,-10,10);
+            Point3f p8 = new Point3f(10,-10,10);
 
             Point3f nX1 = new Point3f(1,0,0);
             Point3f nX2 = new Point3f(-1,0,0);

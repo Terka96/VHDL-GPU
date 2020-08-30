@@ -54,12 +54,19 @@ variable matrix_w2c : TRANSFORM_MATRIX := (
 --(x"3abb",x"0000",x"b852",x"4600")
 --);
 
---side upper cut
+--side upper cut cube <-1,1>
+--variable matrix_pp : TRANSFORM_MATRIX := (
+--(x"3e14",x"0000",x"baa4",x"bc64"),
+--(x"0000",x"3eed",x"0000",x"c532"),
+--(x"b7af",x"0000",x"bb08",x"47f5"),
+--(x"b7ab",x"0000",x"bb05",x"4812")
+--);
+--cube <-10,10>
 variable matrix_pp : TRANSFORM_MATRIX := (
-(x"3e14",x"0000",x"baa4",x"bc64"),
-(x"0000",x"3eed",x"0000",x"c532"),
-(x"b7af",x"0000",x"bb08",x"47f5"),
-(x"b7ab",x"0000",x"bb05",x"4812")
+(x"3e14",x"0000",x"baa4",x"41a1"),
+(x"0000",x"3eed",x"0000",x"ce7e"),
+(x"b7af",x"0000",x"bb08",x"52c6"),
+(x"b7ab",x"0000",x"bb05",x"52c8")
 );
 
 --cup

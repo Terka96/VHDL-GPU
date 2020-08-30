@@ -4,20 +4,27 @@ use ieee.numeric_std.all;
 
 package definitions is
 
+subtype MM_ADDRESS is integer range 0 to 255;
+
 subtype FLOAT16 is std_logic_vector(15 downto 0);
 subtype COLOR24 is std_logic_vector(23 downto 0);
 
-subtype MM_ADDRESS is integer range 0 to 255;
-subtype TEX_ADDRESS is signed(9 downto 0);
+constant SCREEN_WIDTH : integer := 640;
+constant SCREEN_HEIGHT : integer := 480;
+constant SCREEN_WIDTH_F : FLOAT16 := x"5d00";
+constant SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
+constant TEX_SIZE : FLOAT16 := x"5400"; --64
+constant AVAILABLE_TRIANGLES : integer := 12;
+constant CU_COUNT : integer := 1;
 
 type TRANSFORM_MATRIX is array (0 to 3,0 to 3) of FLOAT16;
 
-
-type SCREEN_COORDS is
+type INT_COORDS is
   record
      coord_X			: signed( 9 downto 0 );
      coord_Y			: signed( 9 downto 0 );
   end record;
+
 
 type MOD_VERTEX is
   record
@@ -41,35 +48,31 @@ type PROJ_VERTEX is
 	 tex_V				: FLOAT16;
   end record;
 
-type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
-type PROJ_TRIANGLE is array (1 to 3) of PROJ_VERTEX;
-
 type PIXEL is
   record
-	  position			: SCREEN_COORDS;
+	  position			: INT_COORDS;
      color				: COLOR24;
      depth				: FLOAT16;
   end record;
 
-constant SCREEN_WIDTH : integer := 640;
-constant SCREEN_HEIGHT : integer := 480;
-constant SCREEN_WIDTH_F : FLOAT16 := x"5d00";
-constant SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
-constant TEX_SIZE : FLOAT16 := x"5400"; --64
+type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
+type PROJ_TRIANGLE is array (1 to 3) of PROJ_VERTEX;
+type CU_PIXELS is array (1 to CU_COUNT) of PIXEL;
+type CU_TEX_COORDS is array (1 to CU_COUNT) of INT_COORDS;
 
 --JUMP LABELS
 constant BEGIN_FOR1 : integer :=				34;
 constant BEGIN_FORDL1 : integer := 				64;
-constant WAIT_FOR_DATA_POLL1 : integer :=		82;
-constant CONTINUE_FORDL1 : integer :=			83;
-constant CONTINUE_FOR1 : integer :=				84;
-constant END_IF2 : integer :=					85;
-constant BEGIN_FOR2 : integer :=				97;
-constant BEGIN_FORDL2 : integer :=				128;
-constant WAIT_FOR_DATA_POLL2 : integer := 		145;
-constant CONTINUE_FORDL2 : integer :=			146;
-constant CONTINUE_FOR2 : integer :=				147;
-constant END_PROGRAMME : integer :=				148;
+constant WAIT_FOR_DATA_POLL1 : integer :=		83;
+constant CONTINUE_FORDL1 : integer :=			84;
+constant CONTINUE_FOR1 : integer :=				85;
+constant END_IF2 : integer :=					86;
+constant BEGIN_FOR2 : integer :=				98;
+constant BEGIN_FORDL2 : integer :=				129;
+constant WAIT_FOR_DATA_POLL2 : integer := 		147;
+constant CONTINUE_FORDL2 : integer :=			148;
+constant CONTINUE_FOR2 : integer :=				149;
+constant END_PROGRAMME : integer :=				150;
 
 constant empty_m_tri : mod_triangle := ( 
 (geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000"), 
@@ -82,18 +85,6 @@ constant empty_p_tri : proj_triangle := (
 (screen_X => x"0000", screen_Y => x"0000", depth => x"0000", light_L => x"0000", tex_U => x"0000", tex_V => x"0000"), 
 (screen_X => x"0000", screen_Y => x"0000", depth => x"0000", light_L => x"0000", tex_U => x"0000", tex_V => x"0000")
 );
-
-
--- Declare constants
---
--- constant <constant_name>		: time := <time_unit> ns;
--- constant <constant_name>		: integer := <value;
---
--- Declare functions and procedure
---
--- function <function_name>  (signal <signal_name> : in <type_declaration>) return <type_declaration>;
--- procedure <procedure_name> (<type_declaration> <constant_name>	: in <type_declaration>);
---
 
 function to_char(value : std_logic_vector(3 downto 0)) return character;
 function to_char(value : std_logic) return character;
