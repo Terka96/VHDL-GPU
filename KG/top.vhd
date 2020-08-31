@@ -95,7 +95,7 @@ signal cu_pc_pixel : CU_PIXELS;
 signal pc_fb_data : std_logic;
 signal pc_fb_pixel : PIXEL;
 signal pixel_read : std_logic_vector(1 to CU_COUNT);
-signal cu_tex_coords : CU_TEX_COORDS;
+signal cu_tex_coords_sig : CU_TEX_COORDS;
 signal cu_tex_load_en : std_logic_vector(1 to CU_COUNT);
 signal cu_tex_rd : std_logic_vector(1 to CU_COUNT);
 signal tex_color : COLOR24;
@@ -110,7 +110,7 @@ begin
 			
 	TP_entity : TP port map(
 			clk => clk,
-			addr => cu_tex_coords,
+			addr => cu_tex_coords_sig,
 			load_en => cu_tex_load_en,
 			rd_out => cu_tex_rd,
 			color => tex_color
@@ -128,7 +128,7 @@ begin
 		pixel_read => pixel_read(I),
 		tex_load_en => cu_tex_load_en(I),
 		tex_rd => cu_tex_rd(I),
-		tex_coord => cu_tex_coords(I),
+		tex_coord => cu_tex_coords_sig(I),
 		tex_color => tex_color
   );
   end generate CU_BANK_entity;

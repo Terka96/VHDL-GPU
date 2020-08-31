@@ -4,6 +4,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use work.definitions.all;
+use work.cube_presets.all;
 --use IEEE.NUMERIC_STD.ALL;
 
 entity GS is
@@ -31,53 +32,11 @@ begin
 process (clk,ce) is
 variable state : integer := 0;
 variable waiting : std_logic := '0';
-variable light_norm_X : FLOAT16 := x"3565";
-variable light_norm_Y : FLOAT16 := x"34c3";
-variable light_norm_Z : FLOAT16 := x"bb24";
 
---variable light_norm_X : FLOAT16 := x"386c";
---variable light_norm_Y : FLOAT16 := x"2d4e";
---variable light_norm_Z : FLOAT16 := x"3aa2";
-
-variable matrix_w2c : TRANSFORM_MATRIX := (
-(x"3c00",x"0000",x"0000",x"8000"),
-(x"0000",x"3c00",x"0000",x"b800"),
-(x"8000",x"0000",x"3c00",x"bc00"),
-(x"0000",x"0000",x"0000",x"3c00")
-);
-
---side
-variable matrix_pp : TRANSFORM_MATRIX := (
-(x"43d4",x"0000",x"4046",x"c795"),
-(x"0000",x"4538",x"0000",x"c7d5"),
-(x"b827",x"0000",x"3b9b",x"43c0"),
-(x"bffd",x"0000",x"4350",x"4cb0")
-);
-
---side upper cut cube <-1,1>
---variable matrix_pp : TRANSFORM_MATRIX := (
---(x"3e14",x"0000",x"baa4",x"bc64"),
---(x"0000",x"3eed",x"0000",x"c532"),
---(x"b7af",x"0000",x"bb08",x"47f5"),
---(x"b7ab",x"0000",x"bb05",x"4812")
---);
-
---cup
---variable matrix_pp : TRANSFORM_MATRIX := (
---(x"48b7",x"0000",x"c674",x"37e9"),
---(x"0000",x"49b7",x"0000",x"c2db"),
---(x"b886",x"0000",x"ba9d",x"43f4"),
---(x"b884",x"0000",x"ba9a",x"442b")
---);
-
---front
---variable matrix_pp : TRANSFORM_MATRIX := (
---(x"417e",x"0000",x"0000",x"0000"),
---(x"0000",x"417e",x"0000",x"0000"),
---(x"0000",x"0000",x"bc02",x"439d"),
---(x"0000",x"0000",x"bc00",x"4400")
---);
-
+variable matrix_pp : TRANSFORM_MATRIX := matrix_pp_const;
+variable light_norm_X : FLOAT16 := light_norm_X_const;
+variable light_norm_Y : FLOAT16 := light_norm_Y_const;
+variable light_norm_Z : FLOAT16 := light_norm_Z_const;
 
 variable reg_proj_triangle : PROJ_TRIANGLE;
 type registers is array (1 to 6) of FLOAT16;
@@ -263,7 +222,7 @@ jump := 255;
 			  fpu_b_data <= reg(1);
 			  fpu_operation_data <= "0010";
 			  result_reg := 2;
-			--przeliczanie oświetlenia
+			--przeliczanie oswietlenia
 			when 32 =>
 				fpu_a_data <= data_in(vert).norm_X;
 				fpu_b_data <= x"5bf8";	--255

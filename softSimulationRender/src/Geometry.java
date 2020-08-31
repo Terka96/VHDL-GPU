@@ -103,7 +103,7 @@ public class Geometry {
             //Point3f lightPos = new Point3f(3,3,3); //POINT LIGHT
             //Point3f lightDir = new Point3f(center.getX()-lightPos.getX(),center.getY()-lightPos.getY(),center.getZ()-lightPos.getZ()); //POINT LIGHT
             //Point3f lightDir = perspective.transformPointToCam(new Point3f(-1,1,1)); //SUN LIGHT
-            Point3f lightDir = new Point3f(20.0f,15.0f,40.0f);
+            Point3f lightDir = new Point3f(1.7f,1.5f,-4.5f);
             float lightDist = (float)Math.sqrt(lightDir.x*lightDir.x+lightDir.y*lightDir.y+lightDir.z*lightDir.z);
             vertices3d[0].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[0].norm.x+lightDir.y*vertices3d[0].norm.y+lightDir.z*vertices3d[0].norm.z) / lightDist);
             vertices3d[1].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[1].norm.x+lightDir.y*vertices3d[1].norm.y+lightDir.z*vertices3d[1].norm.z) / lightDist);
@@ -201,6 +201,33 @@ public class Geometry {
                     }
                 }   //END IF3 FOR2
             }   //END IF1
+
+/*
+            int maxX = (int)Math.max(vertices3d[0].projected.x,Math.max(vertices3d[1].projected.x,vertices3d[2].projected.x));
+            int maxY = (int)Math.max(vertices3d[0].projected.y,Math.max(vertices3d[1].projected.y,vertices3d[2].projected.y));
+            int minX = (int)Math.max(vertices3d[0].projected.x,Math.min(vertices3d[1].projected.x,vertices3d[2].projected.x));
+            int minY = (int)Math.max(vertices3d[0].projected.y,Math.min(vertices3d[1].projected.y,vertices3d[2].projected.y));
+
+            for(int x =minX;x < maxX;x++)
+                for(int y = minY;y < maxY;y++){
+                    float w0 =;
+                    float w1 =;
+                    float w2 =;
+                    if (w0 >= 0 && w1 >= 0 && w2 >=)
+                }
+
+
+
+
+
+
+*/
+
+
+
+
+
+
         }
     }
 }

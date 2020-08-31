@@ -80,11 +80,10 @@ END COMPONENT;
 		
 		
 shared variable reg_mod_triangle : MOD_TRIANGLE;
-signal mod_triangle : MOD_TRIANGLE;
-signal proj_triangle : PROJ_TRIANGLE;
+signal mod_triangle_sig : MOD_TRIANGLE;
+signal proj_triangle_sig : PROJ_TRIANGLE;
 signal rt_rd : std_logic;
 signal rt_ce : std_logic;
-signal data_available : std_logic;
 
 signal fpu_operation_data : std_logic_vector(3 downto 0);
 signal fpu_a_data : FLOAT16;
@@ -103,8 +102,8 @@ begin
 		rt_rd => rt_rd,
 		rt_ce => rt_ce,
 
-		data_in => mod_triangle,
-		data_out => proj_triangle,		
+		data_in => mod_triangle_sig,
+		data_out => proj_triangle_sig,		
 		fpu_operation_data => fpu_operation_data,
 		fpu_a_data => fpu_a_data,
 		fpu_b_data => fpu_b_data,
@@ -117,7 +116,7 @@ begin
 		clk => clk,
 		rd => rt_rd,
 		ce => rt_ce,
-		data_in => proj_triangle,
+		data_in => proj_triangle_sig,
 		pixel_out => pixel_out,
 		data_out_present =>data_out_present,
 		pixel_read => pixel_read,
@@ -151,7 +150,7 @@ begin
   begin
     if rising_edge(ce) then
 		reg_mod_triangle := data_in;
-		mod_triangle <= reg_mod_triangle;
+		mod_triangle_sig <= reg_mod_triangle;
     end if;
   end process;
 

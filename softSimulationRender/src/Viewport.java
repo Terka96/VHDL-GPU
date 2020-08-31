@@ -4,11 +4,11 @@ public class Viewport {
     public static void main(String[] args) {
         Perspective perspective = new Perspective();
         Geometry model = new Geometry("cube");
-        Canvas canvas = new Canvas(320,240);
+        Canvas canvas = new Canvas(640,480);
         drawFrame(perspective, canvas, model,0);
 
         JFrame frame = new JFrame();
-        frame.setSize(320, 240); // Change width and height as needed
+        frame.setSize(640, 480); // Change width and height as needed
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         CanvasComponent component = new CanvasComponent();
         component.setCanvas(canvas);
@@ -18,7 +18,7 @@ public class Viewport {
         float rot =0;
         while(true){
             drawFrame(perspective, canvas, model,rot);
-            frame.repaint(0,0,0,320,240);
+            frame.repaint(0,0,0,640,480);
             rot += 0.1f;
             try {
                 Thread.sleep(200);

@@ -92,7 +92,7 @@ public class Perspective {
         Point3f rzutnia = new Point3f((point3d.x*projectionMatrix[0][0]+point3d.y*projectionMatrix[0][1]+point3d.z*projectionMatrix[0][2]+projectionMatrix[0][3])/W,
                 (point3d.x*projectionMatrix[1][0]+point3d.y*projectionMatrix[1][1]+point3d.z*projectionMatrix[1][2]+projectionMatrix[1][3])/W,
                 (point3d.x*projectionMatrix[2][0]+point3d.y*projectionMatrix[2][1]+point3d.z*projectionMatrix[2][2]+projectionMatrix[2][3])/W);
-        return new Point3f(rzutnia.x*160+160,-rzutnia.y*120+120,rzutnia.z);
+        return new Point3f(rzutnia.x*320+320,-rzutnia.y*240+240,rzutnia.z);
     }
 
     public float[][] getProjectionMatrix() {

@@ -9,12 +9,13 @@ subtype MM_ADDRESS is integer range 0 to 255;
 subtype FLOAT16 is std_logic_vector(15 downto 0);
 subtype COLOR24 is std_logic_vector(23 downto 0);
 
+constant AVAILABLE_TRIANGLES : integer := 12;
 constant SCREEN_WIDTH : integer := 640;
 constant SCREEN_HEIGHT : integer := 480;
 constant SCREEN_WIDTH_F : FLOAT16 := x"5d00";
 constant SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
-constant TEX_SIZE : FLOAT16 := x"5400"; --64
-constant AVAILABLE_TRIANGLES : integer := 12;
+constant TEX_SIZE_F : FLOAT16 := x"5400"; --64
+constant TEX_SIZE	: integer := 64;
 constant CU_COUNT : integer := 1;
 
 type TRANSFORM_MATRIX is array (0 to 3,0 to 3) of FLOAT16;
@@ -59,6 +60,10 @@ type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
 type PROJ_TRIANGLE is array (1 to 3) of PROJ_VERTEX;
 type CU_PIXELS is array (1 to CU_COUNT) of PIXEL;
 type CU_TEX_COORDS is array (1 to CU_COUNT) of INT_COORDS;
+  
+type TEXTURE_MEM_LINE is array (0 to (TEX_SIZE-1)) of COLOR24;
+type TEXTURE_MEM is array (0 to (TEX_SIZE-1)) of TEXTURE_MEM_LINE;
+type MODEL_MEM is array (0 to 255) of MOD_TRIANGLE;
 
 --JUMP LABELS
 constant BEGIN_FOR1 : integer :=				34;

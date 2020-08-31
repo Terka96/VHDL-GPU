@@ -17,7 +17,7 @@ end TP;
 
 architecture Behavioral of TP is
 
-component tex_mem is
+component TM is
   port(
 			clk : in std_logic; --system clock
 			addr : in INT_COORDS;
@@ -30,7 +30,7 @@ signal tex_rd : std_logic;
 
 begin
 
-TM_entity : tex_mem port map(
+TM_entity : TM port map(
 		clk => clk,
 		addr => address,
 		rd_out => tex_rd,

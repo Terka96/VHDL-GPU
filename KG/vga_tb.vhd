@@ -27,24 +27,27 @@ process (clk) is
     file file_pointer: text open write_mode is "frames/0";
 	 variable l : line;
 	 variable frame : integer := 0;
+	 variable magic_number : string(1 to 2) := "P3";
+	 variable resolution : string(1 to 11) := "640 480 255";
+	 variable space : string(1 to 1) := " ";
 begin
     if rising_edge(clk) then
 		if vga_vsync = '1' then
 			file_close(file_pointer);
 			frame := frame +1;
 			file_open(file_pointer,"frames/vga_f_"& integer'image(frame)&".ppm",write_mode);
-			write(l,"P3");
+			write(l,magic_number);
 			writeline(file_pointer,l);
-			write(l,"640 480 255");
+			write(l,resolution);
 			writeline(file_pointer,l);
 
 		end if;
 
        
 		  write(l, to_str(vga_r));
-		  write(l, " ");
+		  write(l, space);
 		  write(l, to_str(vga_g));
-		  write(l, " ");
+		  write(l, space);
 		  write(l, to_str(vga_b));
 		  writeline(file_pointer,l);
 		  

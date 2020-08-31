@@ -17,7 +17,7 @@ end D;
 
 architecture Behavioral of D is
 
-component model_mem is
+component MM is
   port(
 			clk : in std_logic; --system clock
 			address_in : in MM_ADDRESS;
@@ -27,11 +27,10 @@ component model_mem is
 end component;
 signal address : MM_ADDRESS := 0;
 signal mm_rd : std_logic;
-signal triangle : MOD_TRIANGLE;
 
 begin
 
-MM_entity : model_mem port map(
+MM_entity : MM port map(
 		clk => clk,
 		address_in => address,
 		rd_out => mm_rd,
@@ -41,7 +40,6 @@ MM_entity : model_mem port map(
 process(clk,mm_rd) is
 variable triangle_address : MM_ADDRESS := 1;
 variable data_preloaded : std_logic := '0';
---variable reg_triangle : MOD_TRIANGLE := empty_m_tri;
 variable i : integer := 1;
 begin
 if rising_edge(clk) then
@@ -50,7 +48,6 @@ if rising_edge(clk) then
 			i := 1;
 		end if;
 		if cu_rd(i) = '1' then
-			--data_out <= reg_triangle;
 			cu_ce(i) <= '1';
 			data_preloaded := '0';
 			triangle_address := triangle_address + 1;
@@ -58,8 +55,7 @@ if rising_edge(clk) then
 			cu_ce <= (others => '0');
 		end if;
 	else	--data_preloaded = '0'
-		if mm_rd = '1' and triangle_address <= (AVAILABLE_TRIANGLES+1) then			--to trzeba ten +1 czy nie? :o
-			--reg_triangle := triangle;
+		if mm_rd = '1' and triangle_address <= AVAILABLE_TRIANGLES then			--to trzeba ten +1 czy nie? :o
 			data_preloaded := '1';
 			cu_ce <= (others => '0');
 		end if;

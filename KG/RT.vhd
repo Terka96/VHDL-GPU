@@ -456,7 +456,7 @@ begin
 				result_reg := 7;	-- i * du + tx1u
 			when 69 =>
 				fpu_a_data <= reg(7);
-				fpu_b_data <= TEX_SIZE;
+				fpu_b_data <= TEX_SIZE_F;
 				fpu_operation_data <= "0001";
 				result_reg := 7;	
 			when 70 =>
@@ -475,7 +475,7 @@ begin
 				result_reg := 8;	-- i * dv + tx1v
 			when 73 =>
 				fpu_a_data <= reg(8);
-				fpu_b_data <= TEX_SIZE;
+				fpu_b_data <= TEX_SIZE_F;
 				fpu_operation_data <= "0001";
 				result_reg := 8;	-- tex_coord_Y
 			when 74 =>
@@ -488,7 +488,7 @@ begin
 			when 75 =>
 				tex_coord.coord_X <= signed("0000011111" and reg(7)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
 				tex_coord.coord_Y <= signed("0000011111" and reg(8)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
-				tex_load_en <='1';		-- powinien być jedynką przez jeden cykl!
+				tex_load_en <='1';		-- powinien byc jedynka przez jeden cykl!
 				if tex_rd = '1' then
 					tex_load_en <='0';
 					pixel_data.color := tex_color;
@@ -828,7 +828,7 @@ begin
 				result_reg := 7;	-- i * du + tx1u
 			when 134 =>
 				fpu_a_data <= reg(7);
-				fpu_b_data <= TEX_SIZE;
+				fpu_b_data <= TEX_SIZE_F;
 				fpu_operation_data <= "0001";
 				result_reg := 7;	
 			when 135 =>
@@ -847,7 +847,7 @@ begin
 				result_reg := 8;	-- i * dv + tx1v
 			when 138 =>
 				fpu_a_data <= reg(8);
-				fpu_b_data <= TEX_SIZE;
+				fpu_b_data <= TEX_SIZE_F;
 				fpu_operation_data <= "0001";
 				result_reg := 8;
 			when 139 =>
@@ -860,7 +860,7 @@ begin
 			when 140 =>
 				tex_coord.coord_X <= signed("0000011111" and reg(7)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
 				tex_coord.coord_Y <= signed("0000011111" and reg(8)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
-				tex_load_en <='1';		-- powinien być jedynką przez jeden cykl!
+				tex_load_en <='1';		-- powinien byc jedynka przez jeden cykl!
 				if tex_rd = '1' then
 					tex_load_en <='0';
 					pixel_data.color := tex_color;
