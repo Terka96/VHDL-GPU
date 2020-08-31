@@ -9,46 +9,51 @@ public class Perspective {
         //TRANSLACJA I OBRÓT W OSI Y
         world2CamMatrix[0][0] = (float)Math.cos(camAngle.y);
         world2CamMatrix[0][1] = 0.0f;
-        world2CamMatrix[0][2] = (float)Math.sin(camAngle.y);
-        world2CamMatrix[0][3] = -camPos.x*(float)Math.cos(camAngle.y) - (float)Math.sin(camAngle.y)*camPos.z;// -camPos.x;
+        world2CamMatrix[0][2] = -(float)Math.sin(camAngle.y);
+        world2CamMatrix[0][3] = -camPos.x; //-camPos.x*(float)Math.cos(camAngle.y) - (float)Math.sin(camAngle.y)*camPos.z;
 
         world2CamMatrix[1][0] = 0.0f;
         world2CamMatrix[1][1] = 1.0f;
         world2CamMatrix[1][2] = 0.0f;
         world2CamMatrix[1][3] = -camPos.y;
 
-        world2CamMatrix[2][0] = -(float)Math.sin(camAngle.y);
+        world2CamMatrix[2][0] = (float)Math.sin(camAngle.y);
         world2CamMatrix[2][1] = 0.0f;
         world2CamMatrix[2][2] = (float)Math.cos(camAngle.y);
-        world2CamMatrix[2][3] = camPos.z*(float)Math.sin(camAngle.y) - (float)Math.cos(camAngle.y)*camPos.z; //-camPos.z;
+        world2CamMatrix[2][3] = -camPos.z; //camPos.z*(float)Math.sin(camAngle.y) - (float)Math.cos(camAngle.y)*camPos.z;
 
         world2CamMatrix[3][0] = 0.0f;
         world2CamMatrix[3][1] = 0.0f;
         world2CamMatrix[3][2] = 0.0f;
         world2CamMatrix[3][3] = 1.0f;
 
-        float scale = 1.0f / (float)Math.tan(fov * 0.5f * Math.PI / 180.0f);
-        float near = 0.1f;
-        float far = 100.0f;
+        float tgfov = (float)Math.tan(fov * 0.5f * Math.PI / 180.0f);
+        float aspectRatio = 320.0f/240.0f;
+        float n = 2.0f;
+        float f = 50.0f;
+        float l =-aspectRatio * n * tgfov;
+        float r =aspectRatio * n * tgfov;
+        float b =-n * tgfov;
+        float t =n * tgfov;
 
-        perspectiveMatrix[0][0] = scale;
+        perspectiveMatrix[0][0] = 2 * n / r - l;
         perspectiveMatrix[0][1] = 0.0f;
         perspectiveMatrix[0][2] = 0.0f;
         perspectiveMatrix[0][3] = 0.0f;
 
         perspectiveMatrix[1][0] = 0.0f;
-        perspectiveMatrix[1][1] = scale;
+        perspectiveMatrix[1][1] = 2 * n / t - b;
         perspectiveMatrix[1][2] = 0.0f;
         perspectiveMatrix[1][3] = 0.0f;
 
-        perspectiveMatrix[2][0] = 0.0f;
-        perspectiveMatrix[2][1] = 0.0f;
-        perspectiveMatrix[2][2] = -(far + near) / (far - near);
-        perspectiveMatrix[2][3] = -2 * far * near / (far - near);
+        perspectiveMatrix[2][0] = (r + l) / (r - l);
+        perspectiveMatrix[2][1] = (t + b) / (t - b);
+        perspectiveMatrix[2][2] = (f + n) / (f - n);
+        perspectiveMatrix[2][3] = -1.0f;
 
         perspectiveMatrix[3][0] = 0.0f;
         perspectiveMatrix[3][1] = 0.0f;
-        perspectiveMatrix[3][2] = -1.0f;
+        perspectiveMatrix[3][2] = 2*n*f / (f - n);
         perspectiveMatrix[3][3] = 0.0f;
 
         //PROJECTION MATRIX

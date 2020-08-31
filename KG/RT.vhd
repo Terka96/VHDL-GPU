@@ -419,7 +419,7 @@ begin
 				result_reg := 6;	--dl
 --BEGIN FORDL1
 			when 64 =>
-				report "FOR1 i= " & integer'image(to_integer(ireg(1))) & "FORDL1 i= " & integer'image(to_integer(ireg(8)));
+				--report "FOR1 i= " & integer'image(to_integer(ireg(1))) & "FORDL1 i= " & integer'image(to_integer(ireg(8)));
 				if ireg(8) > ireg(7) then
 					jump := CONTINUE_FOR1;
 				else
@@ -791,7 +791,7 @@ begin
 				
 --BEGIN FORDL2
 			when 129 =>
-				report "FOR2 i= " & integer'image(to_integer(ireg(1))) & "FORDL2 i= " & integer'image(to_integer(ireg(8)));
+				--report "FOR2 i= " & integer'image(to_integer(ireg(1))) & "FORDL2 i= " & integer'image(to_integer(ireg(8)));
 				if ireg(8) > ireg(7) then
 					jump := CONTINUE_FOR2;
 				else

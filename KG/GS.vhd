@@ -31,9 +31,9 @@ begin
 process (clk,ce) is
 variable state : integer := 0;
 variable waiting : std_logic := '0';
-variable light_norm_X : FLOAT16 := x"3818";
-variable light_norm_Y : FLOAT16 := x"3625";
-variable light_norm_Z : FLOAT16 := x"3a25";
+variable light_norm_X : FLOAT16 := x"3565";
+variable light_norm_Y : FLOAT16 := x"34c3";
+variable light_norm_Z : FLOAT16 := x"bb24";
 
 --variable light_norm_X : FLOAT16 := x"386c";
 --variable light_norm_Y : FLOAT16 := x"2d4e";
@@ -47,12 +47,12 @@ variable matrix_w2c : TRANSFORM_MATRIX := (
 );
 
 --side
---variable matrix_pp : TRANSFORM_MATRIX := (
---(x"3b7c",x"0000",x"3dd4",x"0000"),
---(x"0000",x"3eed",x"0000",x"b828"),
---(x"3abe",x"0000",x"b854",x"45cf"),
---(x"3abb",x"0000",x"b852",x"4600")
---);
+variable matrix_pp : TRANSFORM_MATRIX := (
+(x"43d4",x"0000",x"4046",x"c795"),
+(x"0000",x"4538",x"0000",x"c7d5"),
+(x"b827",x"0000",x"3b9b",x"43c0"),
+(x"bffd",x"0000",x"4350",x"4cb0")
+);
 
 --side upper cut cube <-1,1>
 --variable matrix_pp : TRANSFORM_MATRIX := (
@@ -61,13 +61,6 @@ variable matrix_w2c : TRANSFORM_MATRIX := (
 --(x"b7af",x"0000",x"bb08",x"47f5"),
 --(x"b7ab",x"0000",x"bb05",x"4812")
 --);
---cube <-10,10>
-variable matrix_pp : TRANSFORM_MATRIX := (
-(x"3e14",x"0000",x"baa4",x"41a1"),
-(x"0000",x"3eed",x"0000",x"ce7e"),
-(x"b7af",x"0000",x"bb08",x"52c6"),
-(x"b7ab",x"0000",x"bb05",x"52c8")
-);
 
 --cup
 --variable matrix_pp : TRANSFORM_MATRIX := (

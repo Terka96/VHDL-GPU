@@ -30,7 +30,7 @@ public class Viewport {
     private static void drawFrame(Perspective perspective, Canvas canvas, Geometry model, float rotation){
         canvas.clearToColor(new Colour(0,0.5f,0));
         //perspective.calculateProjectionMatrix(new Point3f(2.0f,0.3f,3.0f),new Point3f(0.0f,-0.6f,0.0f),10.0f);  --cup
-        perspective.calculateProjectionMatrix(new Point3f(20.0f,15.0f,40.0f),new Point3f(0.0f,-0.5f,0.0f),60.0f);
+        perspective.calculateProjectionMatrix(new Point3f(1.7f,1.5f,-4.5f),new Point3f(0.0f,-0.5f,0.0f),50.0f);
         model.draw(perspective,canvas);
         showFrame(canvas);
     }
