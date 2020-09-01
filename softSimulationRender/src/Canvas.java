@@ -10,7 +10,7 @@ public class Canvas {
         this.sizeY = sizeY;
         canvas = new Colour[sizeX][sizeY];
         zBuf = new float[sizeX][sizeY];
-        tx = new Texture("tex.bmp");
+        tx = new Texture("tex_tb1.bmp");
     }
     public void drawLine(Point3f p1, Point3f p2,float tx1u,float tx1v,float tx2u,float tx2v, float ll1, float ll2){
             Point3f delta = new Point3f(p2.x-p1.x,0,p2.z-p1.z);

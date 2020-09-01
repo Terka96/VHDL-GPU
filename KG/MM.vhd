@@ -4,7 +4,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 --use IEEE.numeric_std.all;
-use work.cube_presets.all;
+use work.model_presets.all;
 use work.definitions.all;
 
 
@@ -22,7 +22,7 @@ architecture Behavioral of MM is
 begin
   process (clk) is
   variable address_out : MM_ADDRESS := 0;
-  variable memory : MODEL_MEM := cube_model_const;
+  variable memory : MODEL_MEM := model_const;
 
   begin
     if rising_edge(clk) then

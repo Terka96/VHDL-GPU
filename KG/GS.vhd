@@ -5,7 +5,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.ALL;
 use work.definitions.all;
-use work.cube_presets.all;
+use work.model_presets.all;
 
 entity GS is
 	port(
@@ -378,17 +378,17 @@ nop := '0';
 				fpu_b_data <= reg(28);
 				fpu_operation_data <= "0010";
 				result_reg := 10;
-			when 59 => --odwrotności w
+			when 59 => --odwrotnosci w
 				fpu_a_data <= x"3c00";
 				fpu_b_data <= reg(30);
 				fpu_operation_data <= "0010";
 				result_reg := 30;
-			when 60 => --odwrotności w
+			when 60 => --odwrotnosci w
 				fpu_a_data <= x"3c00";
 				fpu_b_data <= reg(29);
 				fpu_operation_data <= "0010";
 				result_reg := 29;
-			when 61 => --odwrotności w
+			when 61 => --odwrotnosci w
 				fpu_a_data <= x"3c00";
 				fpu_b_data <= reg(28);
 				fpu_operation_data <= "0010";
@@ -485,7 +485,7 @@ nop := '0';
 				end if;
 			when 73 =>
 				if ireg(3) > SCREEN_HEIGHT or ireg(3) < 1 or ireg(4) > SCREEN_WIDTH or ireg(4) < 1 then
-					jump := END_PROGRAMME;
+					jump := CONTINE_FORX;
 				else
 					nop := '1';
 				end if;

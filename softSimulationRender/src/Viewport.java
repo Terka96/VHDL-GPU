@@ -3,7 +3,7 @@ import javax.swing.JFrame;
 public class Viewport {
     public static void main(String[] args) {
         Perspective perspective = new Perspective();
-        Geometry model = new Geometry("cube");
+        Geometry model = new Geometry("cube.obj");
         Canvas canvas = new Canvas(640,480);
         drawFrame(perspective, canvas, model,0);
 
@@ -29,8 +29,8 @@ public class Viewport {
     }
     private static void drawFrame(Perspective perspective, Canvas canvas, Geometry model, float rotation){
         canvas.clearToColor(new Colour(0,0.5f,0));
-        //perspective.calculateProjectionMatrix(new Point3f(2.0f,0.3f,3.0f),new Point3f(0.0f,-0.6f,0.0f),10.0f);  --cup
-        perspective.calculateProjectionMatrix(new Point3f(1.7f,1.5f,-4.5f),new Point3f(0.0f,0.5f,0.0f),90.0f);
+        perspective.calculateProjectionMatrix(new Point3f(0.0f,1.0f,-5.0f),new Point3f(0.0f,rotation + 1.6f,0.0f),90.0f);  //cube
+        //perspective.calculateProjectionMatrix(new Point3f(0.0f,1.1f,-2.5f),new Point3f(0.0f,rotation + 3.80f,0.0f),50.0f); //furniture
         model.draw(perspective,canvas);
         showFrame(canvas);
     }

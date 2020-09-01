@@ -31,14 +31,9 @@ public class Texture {
 
     }
     Colour getColor(float u,float v){
-        float nU = u - (float)(int)u;
-        float nV = v - (float)(int)v;
-        if(nU < 0 ) nU += 1.0f;
-        if(nV < 0 ) nV += 1.0f;
-        int x = (int)(nU*sizeX);
-        int y = (int)(nV*sizeY);
-        if(x>=sizeX) x=0;
-        if(y>=sizeY) y=0;
+        int x = (int)(u*(float)sizeX)%sizeX; if(x < 0 ) x+=sizeX;
+        int y = (int)(v*(float)sizeY)%sizeY; if(y < 0 ) y+=sizeY;
+
         return texture[x][y];
     }
     void drawOnCanvas(Canvas canvas){

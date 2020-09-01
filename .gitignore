@@ -28,3 +28,8 @@ KG/*.xmsgs
 softSimulationRender/.idea/
 softSimulationRender/out/
 softSimulationRender/tex/
+
+#ignore run results
+KG/frames/
+KG/benchmark/work/*
+KG/benchmark/runs/*

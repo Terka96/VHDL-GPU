@@ -14,3 +14,9 @@ https://www.h-schmidt.net/FloatConverter/IEEE754.html
 
 VGA SIGNAL READER:
 https://ericeastwood.com/lab/vga-simulator/
+
+THEORY:
+https://en.wikipedia.org/wiki/Texture_mapping
+https://www.scratchapixel.com/index.php?redirect
+http://home.agh.edu.pl/~glowacki/docs/matwykl/GrafKomp/OpenGL-MacRzutow.pdf
+https://pl.wikipedia.org/wiki/Elementarne_macierze_transformacji
