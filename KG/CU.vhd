@@ -29,32 +29,13 @@ component GS
 			clk : in std_logic; --system clock
 			rd : out std_logic; --is idle
 			ce : in std_logic;
-			rt_rd : in std_logic; --is rt idle
-			rt_ce : out std_logic;
 			data_in : in MOD_TRIANGLE;
-			data_out : out PROJ_TRIANGLE; --data for RT
-			
-			fpu_operation_data : out std_logic_vector(3 downto 0);
-			fpu_a_data : out FLOAT16;
-			fpu_b_data : out FLOAT16;
-			fpu_res_data : in FLOAT16;
-			fpu_operation_valid : out std_logic;
-			fpu_res_valid : in std_logic
-			);
-end component;
-
-component RT
-	port(
-			clk : in std_logic; --system clock
-			rd : out std_logic; --is idle
-			ce : in std_logic;
-			data_in : in PROJ_TRIANGLE; --data for RT
 			pixel_out : out PIXEL; --data for RT
 			data_out_present : out std_logic;
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic;
 			tex_rd : in std_logic;
-			tex_coord : out INT_COORDS;
+			tex_coord : out INT_COORDS := ("0000000000","0000000000");
 			tex_color : in COLOR24;
 			
 			fpu_operation_data : out std_logic_vector(3 downto 0);
@@ -64,7 +45,7 @@ component RT
 			fpu_operation_valid : out std_logic := '0';
 			fpu_res_valid : in std_logic
 			);
-end component;	
+end component;
 			
 COMPONENT fpu
   PORT (
@@ -81,16 +62,11 @@ END COMPONENT;
 		
 shared variable reg_mod_triangle : MOD_TRIANGLE;
 signal mod_triangle_sig : MOD_TRIANGLE;
-signal proj_triangle_sig : PROJ_TRIANGLE;
-signal rt_rd : std_logic;
-signal rt_ce : std_logic;
 
 signal fpu_operation_data : std_logic_vector(3 downto 0);
 signal fpu_a_data : FLOAT16;
 signal fpu_b_data : FLOAT16;
 signal fpu_res_data : FLOAT16;
-signal fpu_operation_valid_gs : std_logic;
-signal fpu_operation_valid_rt : std_logic;
 signal fpu_operation_valid : std_logic;
 signal fpu_res_valid : std_logic;
 
@@ -99,24 +75,8 @@ begin
 		clk => clk,
 		rd => rd, --if GS ready then CU ready
 		ce => ce,
-		rt_rd => rt_rd,
-		rt_ce => rt_ce,
 
 		data_in => mod_triangle_sig,
-		data_out => proj_triangle_sig,		
-		fpu_operation_data => fpu_operation_data,
-		fpu_a_data => fpu_a_data,
-		fpu_b_data => fpu_b_data,
-		fpu_res_data => fpu_res_data,
-		fpu_operation_valid => fpu_operation_valid_gs,
-		fpu_res_valid => fpu_res_valid
-  );
-  
-  RT_entity : RT port map(
-		clk => clk,
-		rd => rt_rd,
-		ce => rt_ce,
-		data_in => proj_triangle_sig,
 		pixel_out => pixel_out,
 		data_out_present =>data_out_present,
 		pixel_read => pixel_read,
@@ -124,14 +84,13 @@ begin
 		tex_rd => tex_rd,
 		tex_coord => tex_coord,
 		tex_color => tex_color,
-		
 		fpu_operation_data => fpu_operation_data,
 		fpu_a_data => fpu_a_data,
 		fpu_b_data => fpu_b_data,
 		fpu_res_data => fpu_res_data,
-		fpu_operation_valid => fpu_operation_valid_rt,
+		fpu_operation_valid => fpu_operation_valid,
 		fpu_res_valid => fpu_res_valid
-		);
+  );
 	
   fpu_entity : fpu PORT MAP (
 		clk => clk,
@@ -143,8 +102,6 @@ begin
 		fpu_res_valid => fpu_res_valid
   );
 		
-		
-	fpu_operation_valid <= fpu_operation_valid_gs or fpu_operation_valid_rt;
 		
   process (ce) is
   begin

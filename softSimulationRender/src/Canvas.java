@@ -31,6 +31,13 @@ public class Canvas {
             }
     }
 
+    public void drawTexel(float x, float y, float z, float l, float tu,float tv){
+        Colour diffuse = tx.getColor(tu,tv);
+        setCurrentColour(new Colour(diffuse.getR()*(l)/255.0f,diffuse.getG()*(l)/255.0f,diffuse.getB()*(l)/255.0f));
+        //setCurrentColour(new Colour(z,z,z));
+        drawPixel((int) x, (int) y, z);
+    }
+
     ///x,y and depth z
     public void drawPixel(int x, int y, float z){
         if(x > 0 && x < sizeX && y > 0 && y < sizeY && z < zBuf[x][y]) {

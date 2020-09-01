@@ -12,8 +12,8 @@ subtype COLOR24 is std_logic_vector(23 downto 0);
 constant AVAILABLE_TRIANGLES : integer := 12;
 constant SCREEN_WIDTH : integer := 640;
 constant SCREEN_HEIGHT : integer := 480;
-constant SCREEN_WIDTH_F : FLOAT16 := x"5d00";
-constant SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
+constant HALF_SCREEN_WIDTH_F : FLOAT16 := x"5d00";
+constant HALF_SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
 constant TEX_SIZE_F : FLOAT16 := x"5400"; --64
 constant TEX_SIZE	: integer := 64;
 constant CU_COUNT : integer := 1;
@@ -39,16 +39,6 @@ type MOD_VERTEX is
      tex_V				: FLOAT16;
   end record;
 
-type PROJ_VERTEX is
-  record
-    screen_X			: FLOAT16;
-    screen_Y			: FLOAT16;
-    depth				: FLOAT16;
-	 light_L				: FLOAT16;
-	 tex_U				: FLOAT16;
-	 tex_V				: FLOAT16;
-  end record;
-
 type PIXEL is
   record
 	  position			: INT_COORDS;
@@ -57,7 +47,6 @@ type PIXEL is
   end record;
 
 type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
-type PROJ_TRIANGLE is array (1 to 3) of PROJ_VERTEX;
 type CU_PIXELS is array (1 to CU_COUNT) of PIXEL;
 type CU_TEX_COORDS is array (1 to CU_COUNT) of INT_COORDS;
   
@@ -66,18 +55,14 @@ type TEXTURE_MEM is array (0 to (TEX_SIZE-1)) of TEXTURE_MEM_LINE;
 type MODEL_MEM is array (0 to 255) of MOD_TRIANGLE;
 
 --JUMP LABELS
-constant BEGIN_FOR1 : integer :=				34;
-constant BEGIN_FORDL1 : integer := 				64;
-constant WAIT_FOR_DATA_POLL1 : integer :=		83;
-constant CONTINUE_FORDL1 : integer :=			84;
-constant CONTINUE_FOR1 : integer :=				85;
-constant END_IF2 : integer :=					86;
-constant BEGIN_FOR2 : integer :=				98;
-constant BEGIN_FORDL2 : integer :=				129;
-constant WAIT_FOR_DATA_POLL2 : integer := 		147;
-constant CONTINUE_FORDL2 : integer :=			148;
-constant CONTINUE_FOR2 : integer :=				149;
-constant END_PROGRAMME : integer :=				150;
+constant BEGIN_GEOMETRY : integer :=			1;
+constant BEGIN_FORY : integer := 				71;
+constant BEGIN_FORX : integer := 				72;
+constant WAIT_FOR_TEXEL : integer :=			138;
+constant WAIT_FOR_DATA_POLL : integer := 		140;
+constant CONTINUE_FORX : integer :=				141;
+constant CONTINUE_FORY : integer :=				142;
+constant END_PROGRAMME : integer :=				143;
 
 constant empty_m_tri : mod_triangle := ( 
 (geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000"), 
@@ -85,11 +70,6 @@ constant empty_m_tri : mod_triangle := (
 (geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000")
 );
 
-constant empty_p_tri : proj_triangle := ( 
-(screen_X => x"0000", screen_Y => x"0000", depth => x"0000", light_L => x"0000", tex_U => x"0000", tex_V => x"0000"), 
-(screen_X => x"0000", screen_Y => x"0000", depth => x"0000", light_L => x"0000", tex_U => x"0000", tex_V => x"0000"), 
-(screen_X => x"0000", screen_Y => x"0000", depth => x"0000", light_L => x"0000", tex_U => x"0000", tex_V => x"0000")
-);
 
 function to_char(value : std_logic_vector(3 downto 0)) return character;
 function to_char(value : std_logic) return character;

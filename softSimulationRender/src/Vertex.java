@@ -2,7 +2,7 @@ public class Vertex {
     public Point3f geo;
     public Point3f norm;
     public Point3f uvmap;
-    public Point3f projected;
+    public Point4f projected;
     public float lightLevel;
     public Colour color;
 

@@ -6,9 +6,9 @@ public class Converter {
         //String y = "x\""+Integer.toHexString(f32tof16(-240.0f) & 0xffff)+"\"";
         //System.out.println("X: "+x+" Y: "+y);
         //exportMatrix();
-        System.out.println(light_dir_to_norm(new Point3f(1.7f,1.5f,-4.5f)));
+        //System.out.println(light_dir_to_norm(new Point3f(1.7f,1.5f,-4.5f)));
         //exportbmp("tex.bmp",64);
-        //exportObj("cube");
+        exportObj("cube");
 
     }
 
@@ -26,7 +26,7 @@ public class Converter {
     private static void exportMatrix(){
         Perspective p = new Perspective();
         //p.calculateProjectionMatrix(new Point3f(2.0f,0.3f,3.0f),new Point3f(0.0f,-0.6f,0.0f),10.0f); //cuptex
-        p.calculateProjectionMatrix(new Point3f(1.7f,1.5f,-4.5f),new Point3f(0.0f,-0.5f,0.0f),50.0f); //cube <-1,1>
+        p.calculateProjectionMatrix(new Point3f(1.7f,1.5f,-4.5f),new Point3f(0.0f,0.5f,0.0f),90.0f); //cube <-1,1>
         //float[][] w2c = p.getWorld2CamMatrix();
         float[][] pp = p.getProjectionMatrix();
 

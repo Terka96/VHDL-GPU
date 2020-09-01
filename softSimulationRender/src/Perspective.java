@@ -9,7 +9,7 @@ public class Perspective {
         //TRANSLACJA I OBRÓT W OSI Y
         world2CamMatrix[0][0] = (float)Math.cos(camAngle.y);
         world2CamMatrix[0][1] = 0.0f;
-        world2CamMatrix[0][2] = -(float)Math.sin(camAngle.y);
+        world2CamMatrix[0][2] = (float)Math.sin(camAngle.y);
         world2CamMatrix[0][3] = -camPos.x; //-camPos.x*(float)Math.cos(camAngle.y) - (float)Math.sin(camAngle.y)*camPos.z;
 
         world2CamMatrix[1][0] = 0.0f;
@@ -17,7 +17,7 @@ public class Perspective {
         world2CamMatrix[1][2] = 0.0f;
         world2CamMatrix[1][3] = -camPos.y;
 
-        world2CamMatrix[2][0] = (float)Math.sin(camAngle.y);
+        world2CamMatrix[2][0] = -(float)Math.sin(camAngle.y);
         world2CamMatrix[2][1] = 0.0f;
         world2CamMatrix[2][2] = (float)Math.cos(camAngle.y);
         world2CamMatrix[2][3] = -camPos.z; //camPos.z*(float)Math.sin(camAngle.y) - (float)Math.cos(camAngle.y)*camPos.z;
@@ -30,7 +30,7 @@ public class Perspective {
         float tgfov = (float)Math.tan(fov * 0.5f * Math.PI / 180.0f);
         float aspectRatio = 320.0f/240.0f;
         float n = 2.0f;
-        float f = 50.0f;
+        float f = 100.0f;
         float l =-aspectRatio * n * tgfov;
         float r =aspectRatio * n * tgfov;
         float b =-n * tgfov;
@@ -55,7 +55,28 @@ public class Perspective {
         perspectiveMatrix[3][1] = 0.0f;
         perspectiveMatrix[3][2] = 2*n*f / (f - n);
         perspectiveMatrix[3][3] = 0.0f;
+/*
 
+        perspectiveMatrix[0][0] = tgfov;
+        perspectiveMatrix[0][1] = 0.0f;
+        perspectiveMatrix[0][2] = 0.0f;
+        perspectiveMatrix[0][3] = 0.0f;
+
+        perspectiveMatrix[1][0] = 0.0f;
+        perspectiveMatrix[1][1] = tgfov;
+        perspectiveMatrix[1][2] = 0.0f;
+        perspectiveMatrix[1][3] = 0.0f;
+
+        perspectiveMatrix[2][0] = 0.0f;
+        perspectiveMatrix[2][1] = 0.0f;
+        perspectiveMatrix[2][2] = -f / (f - n);
+        perspectiveMatrix[2][3] = -(n*f) / (f - n);
+
+        perspectiveMatrix[3][0] = 0.0f;
+        perspectiveMatrix[3][1] = 0.0f;
+        perspectiveMatrix[3][2] = -1.0f;
+        perspectiveMatrix[3][3] = 0.0f;
+*/
         //PROJECTION MATRIX
 
         projectionMatrix[0][0] = perspectiveMatrix[0][0]*world2CamMatrix[0][0]+perspectiveMatrix[0][1]*world2CamMatrix[1][0]+perspectiveMatrix[0][2]*world2CamMatrix[2][0]+ perspectiveMatrix[0][3]*world2CamMatrix[3][0];
@@ -86,13 +107,13 @@ public class Perspective {
                 (point3d.x*world2CamMatrix[1][0]+point3d.y*world2CamMatrix[1][1]+point3d.z*world2CamMatrix[1][2]+world2CamMatrix[1][3])/W,
                 (point3d.x*world2CamMatrix[2][0]+point3d.y*world2CamMatrix[2][1]+point3d.z*world2CamMatrix[2][2]+world2CamMatrix[2][3])/W);
     }
-    public Point3f projectPoint(Point3f point3d){
+    public Point4f projectPoint(Point3f point3d){
         float W = point3d.x*projectionMatrix[3][0]+point3d.y*projectionMatrix[3][1]+point3d.z*projectionMatrix[3][2]+projectionMatrix[3][3];
 
         Point3f rzutnia = new Point3f((point3d.x*projectionMatrix[0][0]+point3d.y*projectionMatrix[0][1]+point3d.z*projectionMatrix[0][2]+projectionMatrix[0][3])/W,
                 (point3d.x*projectionMatrix[1][0]+point3d.y*projectionMatrix[1][1]+point3d.z*projectionMatrix[1][2]+projectionMatrix[1][3])/W,
                 (point3d.x*projectionMatrix[2][0]+point3d.y*projectionMatrix[2][1]+point3d.z*projectionMatrix[2][2]+projectionMatrix[2][3])/W);
-        return new Point3f(rzutnia.x*320+320,-rzutnia.y*240+240,rzutnia.z);
+        return new Point4f(rzutnia.x*320+320,-rzutnia.y*240+240,rzutnia.z,W);
     }
 
     public float[][] getProjectionMatrix() {

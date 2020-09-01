@@ -33,20 +33,20 @@ public class Geometry {
             Point3f UV4 = new Point3f(1,1,0);
 
             //by z
-            triangles.add(new Triangle(new Vertex(p1,nZ2,UV1),new Vertex(p2,nZ2,UV2),new Vertex(p3,nZ2,UV3)));
-            triangles.add(new Triangle(new Vertex(p3,nZ2,UV3),new Vertex(p2,nZ2,UV2),new Vertex(p4,nZ2,UV4)));
-            triangles.add(new Triangle(new Vertex(p5,nZ1,UV1),new Vertex(p6,nZ1,UV2),new Vertex(p7,nZ1,UV3)));
-            triangles.add(new Triangle(new Vertex(p7,nZ1,UV3),new Vertex(p6,nZ1,UV2),new Vertex(p8,nZ1,UV4)));
+            triangles.add(new Triangle(new Vertex(p3,nZ2,UV3),new Vertex(p2,nZ2,UV2),new Vertex(p1,nZ2,UV1)));
+            //triangles.add(new Triangle(new Vertex(p4,nZ2,UV4),new Vertex(p2,nZ2,UV2),new Vertex(p3,nZ2,UV3)));
+            //triangles.add(new Triangle(new Vertex(p5,nZ1,UV1),new Vertex(p6,nZ1,UV2),new Vertex(p7,nZ1,UV3)));
+            //triangles.add(new Triangle(new Vertex(p7,nZ1,UV3),new Vertex(p6,nZ1,UV2),new Vertex(p8,nZ1,UV4)));
             //by x
-            triangles.add(new Triangle(new Vertex(p1,nX2,UV1),new Vertex(p3,nX2,UV2),new Vertex(p5,nX2,UV3)));
-            triangles.add(new Triangle(new Vertex(p5,nX2,UV3),new Vertex(p3,nX2,UV2),new Vertex(p7,nX2,UV4)));
-            triangles.add(new Triangle(new Vertex(p2,nX1,UV1),new Vertex(p4,nX1,UV2),new Vertex(p6,nX1,UV3)));
-            triangles.add(new Triangle(new Vertex(p6,nX1,UV3),new Vertex(p4,nX1,UV2),new Vertex(p8,nX1,UV4)));
+            //triangles.add(new Triangle(new Vertex(p5,nX2,UV3),new Vertex(p3,nX2,UV2),new Vertex(p1,nX2,UV1)));
+            //triangles.add(new Triangle(new Vertex(p7,nX2,UV4),new Vertex(p3,nX2,UV2),new Vertex(p5,nX2,UV3)));
+            //triangles.add(new Triangle(new Vertex(p2,nX1,UV1),new Vertex(p4,nX1,UV2),new Vertex(p6,nX1,UV3)));
+            //triangles.add(new Triangle(new Vertex(p6,nX1,UV3),new Vertex(p4,nX1,UV2),new Vertex(p8,nX1,UV4)));
             //by y
-            triangles.add(new Triangle(new Vertex(p3,nY2,UV1),new Vertex(p4,nY2,UV2),new Vertex(p7,nY2,UV3)));
-            triangles.add(new Triangle(new Vertex(p7,nY2,UV3),new Vertex(p4,nY2,UV2),new Vertex(p8,nY2,UV4)));
-            triangles.add(new Triangle(new Vertex(p1,nY1,UV1),new Vertex(p2,nY1,UV2),new Vertex(p5,nY1,UV3)));
-            triangles.add(new Triangle(new Vertex(p5,nY1,UV3),new Vertex(p2,nY1,UV2),new Vertex(p6,nY1,UV4)));
+            //triangles.add(new Triangle(new Vertex(p7,nY2,UV3),new Vertex(p4,nY2,UV2),new Vertex(p3,nY2,UV1)));
+            //triangles.add(new Triangle(new Vertex(p8,nY2,UV4),new Vertex(p4,nY2,UV2),new Vertex(p7,nY2,UV3)));
+            //triangles.add(new Triangle(new Vertex(p1,nY1,UV1),new Vertex(p2,nY1,UV2),new Vertex(p5,nY1,UV3)));
+            //triangles.add(new Triangle(new Vertex(p5,nY1,UV3),new Vertex(p2,nY1,UV2),new Vertex(p6,nY1,UV4)));
         } else {
             File file = new File(fileName);
             try {
@@ -86,13 +86,12 @@ public class Geometry {
     public void draw(Perspective perspective,Canvas canvas){
         for(Triangle triangle : triangles){
             Vertex[] vertices3d = triangle.getVertices();
-            Point3f upper,mid,lower;
             vertices3d[0].projected = perspective.projectPoint(vertices3d[0].geo);
             vertices3d[1].projected = perspective.projectPoint(vertices3d[1].geo);
             vertices3d[2].projected = perspective.projectPoint(vertices3d[2].geo);
 
-            if(vertices3d[0].projected.z<0 || vertices3d[1].projected.z <0 || vertices3d[2].projected.z <0)
-                continue;
+            //if(vertices3d[0].projected.z<0 || vertices3d[1].projected.z <0 || vertices3d[2].projected.z <0)
+            //    continue;
 
             //wireframe mode
 //            canvas.drawLine(vertices2d[0],vertices2d[1]);
@@ -108,7 +107,7 @@ public class Geometry {
             vertices3d[0].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[0].norm.x+lightDir.y*vertices3d[0].norm.y+lightDir.z*vertices3d[0].norm.z) / lightDist);
             vertices3d[1].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[1].norm.x+lightDir.y*vertices3d[1].norm.y+lightDir.z*vertices3d[1].norm.z) / lightDist);
             vertices3d[2].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[2].norm.x+lightDir.y*vertices3d[2].norm.y+lightDir.z*vertices3d[2].norm.z) / lightDist);
-
+/*
             //color fill
             //posortuj wierzchołki wzrostem
             Vertex swapper;
@@ -201,19 +200,60 @@ public class Geometry {
                     }
                 }   //END IF3 FOR2
             }   //END IF1
+*/
 
-/*
-            int maxX = (int)Math.max(vertices3d[0].projected.x,Math.max(vertices3d[1].projected.x,vertices3d[2].projected.x));
-            int maxY = (int)Math.max(vertices3d[0].projected.y,Math.max(vertices3d[1].projected.y,vertices3d[2].projected.y));
-            int minX = (int)Math.max(vertices3d[0].projected.x,Math.min(vertices3d[1].projected.x,vertices3d[2].projected.x));
-            int minY = (int)Math.max(vertices3d[0].projected.y,Math.min(vertices3d[1].projected.y,vertices3d[2].projected.y));
+            float v1x = vertices3d[0].projected.x;
+            float v1y = vertices3d[0].projected.y;
+            float v2x = vertices3d[1].projected.x;
+            float v2y = vertices3d[1].projected.y;
+            float v3x = vertices3d[2].projected.x;
+            float v3y = vertices3d[2].projected.y;
+            float v1w = vertices3d[0].projected.w;
+            float v2w = vertices3d[1].projected.w;
+            float v3w = vertices3d[2].projected.w;
+            float v1z = vertices3d[0].projected.z/v1w;
+            float v2z = vertices3d[1].projected.z/v2w;
+            float v3z = vertices3d[2].projected.z/v3w;
+            float v1l = vertices3d[0].lightLevel/v1w;
+            float v2l = vertices3d[1].lightLevel/v2w;
+            float v3l = vertices3d[2].lightLevel/v3w;
+            float v1tu = vertices3d[0].uvmap.x/v1w;
+            float v1tv = vertices3d[0].uvmap.y/v1w;
+            float v2tu = vertices3d[1].uvmap.x/v2w;
+            float v2tv = vertices3d[1].uvmap.y/v2w;
+            float v3tu = vertices3d[2].uvmap.x/v3w;
+            float v3tv = vertices3d[2].uvmap.y/v3w;
 
-            for(int x =minX;x < maxX;x++)
-                for(int y = minY;y < maxY;y++){
-                    float w0 =;
-                    float w1 =;
-                    float w2 =;
-                    if (w0 >= 0 && w1 >= 0 && w2 >=)
+            int maxX = (int)Math.max(v1x,Math.max(v2x,v3x));
+            int maxY = (int)Math.max(v1y,Math.max(v2y,v3y));
+            int minX = (int)Math.min(v1x,Math.min(v2x,v3x));
+            int minY = (int)Math.min(v1y,Math.min(v2y,v3y));
+
+            v1w = 1.0f / v1w;
+            v2w = 1.0f / v2w;
+            v3w = 1.0f / v3w;
+
+
+            float area = (v3x - v1x) * (v2y - v1y) - (v3y - v1y) * (v2x - v1x);
+
+            for(int y = minY;y <= maxY;y++)
+                for(int x =minX;x <= maxX;x++) {
+                    float w0 =(x - v2x) * (v3y - v2y) - (y - v2y) * (v3x - v2x);
+                    float w1 =(x - v3x) * (v1y - v3y) - (y - v3y) * (v1x - v3x);
+                    float w2 =(x - v1x) * (v2y - v1y) - (y - v1y) * (v2x - v1x);
+                    if (w0 >= 0 && w1 >= 0 && w2 >= 0)
+                    {
+                        w0 /= area;
+                        w1 /= area;
+                        w2 /= area;
+
+                        float w = 1.0f / (w0 * v1w + w1 * v2w + w2 * v3w);
+                        float tu = (w0 * v1tu + w1 * v2tu + w2 * v3tu)*w;
+                        float tv = (w0 * v1tv + w1 * v2tv + w2 * v3tv)*w;
+                        float l =  (w0 * v1l + w1 * v2l + w2 * v3l)*w;
+                        float z =  (w0 * v1z + w1 * v2z + w2 * v3z)*w;
+                        canvas.drawTexel(x,y,z,l,tu,tv);
+                    }
                 }
 
 
@@ -221,7 +261,7 @@ public class Geometry {
 
 
 
-*/
+
 
 
 
