@@ -2,13 +2,13 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use work.definitions.all;
 
+package texture is
 
 constant TEX_SIZE_F : FLOAT16 := x"5400";
 constant TEX_SIZE	: integer := 64;
 type TEXTURE_MEM_LINE is array (0 to (TEX_SIZE-1)) of COLOR24;
 type TEXTURE_MEM is array (0 to (TEX_SIZE-1)) of TEXTURE_MEM_LINE;
 
-package texture is
   constant texture_memory_const : TEXTURE_MEM := ( 
 (x"5c5656",x"6f6764",x"504c4d",x"524e4d",x"5c5250",x"544e4e",x"5c5354",x"656160",x"584f50",x"615652",x"665c5a",x"69615e",x"8e817b",x"877c78",x"7f726c",x"81746c",x"7f7573",x"807674",x"8e8381",x"796c64",x"8c817b",x"948985",x"89807b",x"968c8b",x"8b807c",x"494544",x"8f8681",x"94857e",x"6f6b6a",x"7b7673",x"817670",x"746c69",x"5b5555",x"656364",x"696768",x"656366",x"62615f",x"5f5f5f",x"6b6a68",x"696768",x"66656a",x"5f5e63",x"626264",x"796e68",x"948a80",x"988b83",x"9a8d85",x"998a83",x"9e9590",x"998b82",x"9b8e86",x"988e85",x"968b85",x"988984",x"9c8e85",x"988e8c",x"907f77",x"9a8f89",x"928982",x"998c84",x"5c5250",x"615755",x"535250",x"57524f"),
 (x"89807b",x"877e79",x"877c78",x"827771",x"827974",x"887b73",x"837872",x"7f726a",x"80736b",x"7e7169",x"8b7d7a",x"877a72",x"5f5a57",x"615957",x"565253",x"595051",x"625a57",x"655a58",x"544e4e",x"574f4d",x"655c57",x"545454",x"625c5c",x"625e5b",x"635f5e",x"6e6159",x"6a564f",x"595556",x"958b89",x"9e938d",x"9a8f89",x"9e948b",x"9c8e85",x"94877f",x"988b85",x"968d86",x"9c918b",x"998880",x"978e87",x"9a8f89",x"958882",x"92857f",x"a09591",x"9e948b",x"605c5d",x"68605d",x"625a58",x"675d5b",x"6c6260",x"645a58",x"5f5b5c",x"675d5b",x"655d5a",x"625a57",x"695e5c",x"605953",x"6f6661",x"594e4c",x"5f5959",x"695a53",x"928177",x"847a79",x"7e7472",x"837a75"),

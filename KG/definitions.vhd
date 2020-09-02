@@ -1,8 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use ieee.numeric_std.all;
-use work.texture.tex_size_f;
-use work.texture.tex_size;
 
 package definitions is
 
@@ -46,6 +44,7 @@ type PIXEL is
 type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
 type CU_PIXELS is array (1 to CU_COUNT) of PIXEL;
 type CU_TEX_COORDS is array (1 to CU_COUNT) of INT_COORDS;
+type CU_INTEGERS is array (1 to CU_COUNT) of integer;
 
 --JUMP LABELS
 constant BEGIN_GEOMETRY : integer :=			1;

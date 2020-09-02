@@ -6,6 +6,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.ALL;
 use work.definitions.all;
 use work.model_presets.all;
+use work.texture.all;
 
 entity GS is
 	port(
@@ -14,7 +15,7 @@ entity GS is
 			ce : in std_logic;
 			data_in : in MOD_TRIANGLE;
 			pixel_out : out PIXEL; --data for RT
-			data_out_present : out std_logic;
+			pixel_out_rd : out std_logic;
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic := '0';
 			tex_rd : in std_logic;
@@ -26,7 +27,8 @@ entity GS is
 			fpu_b_data : out FLOAT16;
 			fpu_res_data : in FLOAT16;
 			fpu_operation_valid : out std_logic := '0';
-			fpu_res_valid : in std_logic
+			fpu_res_valid : in std_logic;
+			instruction_number : out integer
 			);
 end GS;
 
@@ -56,6 +58,7 @@ variable szkaler : std_logic_vector(17 downto 0) := "000000000000000000";				--c
 begin
 jump := 255;
 nop := '0';
+instruction_number <= state;
   -- THIS IS A STATE MACHINE WRITTEN LIKE PROGRAMME WHERE STATE IS A PROGRAM COUNTER
   if rising_edge(clk) and state /= 0 then
     if waiting = '1' then
@@ -485,7 +488,7 @@ nop := '0';
 				end if;
 			when 73 =>
 				if ireg(3) > SCREEN_HEIGHT or ireg(3) < 1 or ireg(4) > SCREEN_WIDTH or ireg(4) < 1 then
-					jump := CONTINE_FORX;
+					jump := CONTINUE_FORX;
 				else
 					nop := '1';
 				end if;
@@ -833,11 +836,11 @@ nop := '0';
 --WAIT FOR DATA POLL
 			when 140 =>
 				if pixel_read = '1' then
-					data_out_present <= '0';
+					pixel_out_rd <= '0';
 					nop := '1';
 				else
 					pixel_out <= pixel_data;
-					data_out_present <= '1';
+					pixel_out_rd <= '1';
 					jump := WAIT_FOR_DATA_POLL;
 				end if;
 --CONTINUE FORX

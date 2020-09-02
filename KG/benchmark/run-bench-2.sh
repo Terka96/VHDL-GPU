@@ -1,5 +1,5 @@
 #!/bin/sh
-cd work
+cd work2
 #add xilinx ipcore sources
 ghdl -i --work=xilinxcorelib /opt/Xilinx/14.7/ISE_DS/ISE/vhdl/src/XilinxCoreLib/*.vhd
 #add xilinx ipcore configuration files
@@ -7,8 +7,8 @@ ghdl -i ../../ipcore_dir/*.vhd
 #add our sources
 ghdl -i ../../*.vhd
 #select texture and model packages
-ghdl -i --work=work ../../textures/tb2/texture.vhd
-ghdl -i --work=work ../../models/tb2/model_presets.vhd
+ghdl -i ../../textures/tb2/texture.vhd
+ghdl -i ../../models/tb2/model_presets.vhd
 #build
 ghdl -m -g -Pxilinxcorelib --warn-unused --ieee=synopsys master_tb
 #create run directory and symlinks
@@ -19,7 +19,7 @@ mkdir $DIRNAME/frames
 ln -s $DIRNAME run_logs
 ln -s $DIRNAME/frames frames
 #RUN
-ghdl -r master_tb --stop-time=100000ms
+ghdl -r master_tb --stop-time=20000ms
 #nice parameters: --wave=vga.ghw --disp-tree=inst --stop-time=20000ns
 #clean symlinks
 rm run_logs frames

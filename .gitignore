@@ -31,5 +31,6 @@ softSimulationRender/tex/
 
 #ignore run results
 KG/frames/
-KG/benchmark/work/*
+KG/benchmark/work1/*
+KG/benchmark/work2/*
 KG/benchmark/runs/*

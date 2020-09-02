@@ -46,12 +46,14 @@ component CU is
 		rd : out std_logic;
 		ce : in std_logic;
 		pixel_out : out PIXEL;
-		data_out_present : out std_logic;
+		pixel_out_rd : out std_logic;
 		pixel_read : in std_logic;
 		tex_load_en : out std_logic;
 		tex_rd : in std_logic;
 		tex_coord : out INT_COORDS;
-		tex_color : in COLOR24
+		tex_color : in COLOR24;
+		operation : out integer;
+		instruction_number : out integer
 	);
 end component;
 
@@ -72,6 +74,7 @@ component FB is
 			clk : in std_logic; --system clock
 			data_in : in std_logic;
 			pixel_in : in PIXEL;
+			pixel_drawn : out std_logic;
 			rd : out std_logic;
 			-- VGA DRIVER
 			vga_vsync : out std_logic;
@@ -83,13 +86,27 @@ component FB is
 			);
 end component;
 
+component metrics is
+	port(
+		clk : in std_logic;	--system clock
+		cu_rd : in std_logic_vector(1 to CU_COUNT);
+		cu_ce : in std_logic_vector(1 to CU_COUNT);
+		fb_rd : in std_logic;
+		cu_pc_data : in std_logic_vector(1 to CU_COUNT);
+		pc_fb_data : in std_logic;
+		cu_tex_load_en : in std_logic_vector(1 to CU_COUNT);
+		cu_tex_rd : in std_logic_vector(1 to CU_COUNT);
+		operation : in CU_INTEGERS;
+		instruction_number : in CU_INTEGERS;
+		pixel_drawn : in std_logic
+	);
+end component;
+
 signal data : MOD_TRIANGLE;
-signal ce : std_logic;
 signal cu_rd : std_logic_vector(1 to CU_COUNT);
 signal cu_ce : std_logic_vector(1 to CU_COUNT);
 signal mm_rd : std_logic;
 signal fb_rd : std_logic;
-signal tex_rd : std_logic;
 signal cu_pc_data : std_logic_vector(1 to CU_COUNT);
 signal cu_pc_pixel : CU_PIXELS;
 signal pc_fb_data : std_logic;
@@ -99,6 +116,9 @@ signal cu_tex_coords_sig : CU_TEX_COORDS;
 signal cu_tex_load_en : std_logic_vector(1 to CU_COUNT);
 signal cu_tex_rd : std_logic_vector(1 to CU_COUNT);
 signal tex_color : COLOR24;
+signal pixel_drawn : std_logic;
+signal cu_operation : CU_INTEGERS;
+signal cu_instruction_number : CU_INTEGERS;
 
 begin
   D_entity : D port map(
@@ -124,12 +144,14 @@ begin
 		rd => cu_rd(I),
 		ce => cu_ce(I),
 		pixel_out => cu_pc_pixel(I),
-		data_out_present => cu_pc_data(I),
+		pixel_out_rd => cu_pc_data(I),
 		pixel_read => pixel_read(I),
 		tex_load_en => cu_tex_load_en(I),
 		tex_rd => cu_tex_rd(I),
 		tex_coord => cu_tex_coords_sig(I),
-		tex_color => tex_color
+		tex_color => tex_color,
+		operation => cu_operation(I),
+		instruction_number => cu_instruction_number(I)
   );
   end generate CU_BANK_entity;
   
@@ -147,6 +169,7 @@ begin
 			clk => clk,
 			data_in => pc_fb_data,
 			pixel_in => pc_fb_pixel,
+			pixel_drawn => pixel_drawn,
 			rd => fb_rd,
 			-- VGA DRIVER
 			vga_vsync => vga_vsync,
@@ -156,6 +179,20 @@ begin
 			vga_g => vga_g,
 			vga_b => vga_b
 		);
+		
+	metrics_entity : metrics port map(
+			clk => clk,
+			cu_rd => cu_rd,
+			cu_ce => cu_ce,
+			fb_rd => fb_rd,
+			cu_pc_data => cu_pc_data,
+			pc_fb_data => pc_fb_data,
+			cu_tex_load_en => cu_tex_load_en,
+			cu_tex_rd => cu_tex_rd,
+			operation => cu_operation,
+			instruction_number => cu_instruction_number,
+			pixel_drawn => pixel_drawn
+	);
 
 end Behavioral;
 

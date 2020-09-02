@@ -4,8 +4,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use work.texture.all;
 use work.definitions.all;
+use work.texture.all;
 
 
 entity TM is

@@ -7,6 +7,19 @@ package model_presets is
 
 subtype MM_ADDRESS is integer range 0 to 22;
 constant AVAILABLE_TRIANGLES : integer := 22;
+type MODEL_MEM is array (0 to 22) of MOD_TRIANGLE;
+
+constant light_norm_X_const : FLOAT16 := x"3b8a";
+constant light_norm_Y_const : FLOAT16 := x"338a";
+constant light_norm_Z_const : FLOAT16 := x"338a";
+
+constant matrix_pp_const : TRANSFORM_MATRIX := (
+(x"afc9",x"0000",x"442a",x"0000"),
+(x"0000",x"4400",x"0000",x"c400"),
+(x"bc29",x"0000",x"a7c7",x"4434"),
+(x"c414",x"0000",x"afa0",x"4d1a")
+);
+
 
 constant model_const : MODEL_MEM :=(
 empty_m_tri,
@@ -34,19 +47,6 @@ empty_m_tri,
 ((x"c453",x"4460",x"c453",x"0000",x"bc00",x"0000",x"3c00",x"0000"), (x"c453",x"4460",x"4453",x"0000",x"bc00",x"0000",x"3c00",x"3c00"), (x"4453",x"4460",x"4453",x"0000",x"bc00",x"0000",x"0000",x"3c00")),
 
 others => empty_m_tri);
-
-constant light_norm_X_const : FLOAT16 := x"3b8a";
-constant light_norm_Y_const : FLOAT16 := x"338a";
-constant light_norm_Z_const : FLOAT16 := x"338a";
-
---side
-constant matrix_pp_const : TRANSFORM_MATRIX := (
-(x"afc9",x"0000",x"442a",x"0000"),
-(x"0000",x"4400",x"0000",x"c400"),
-(x"bc29",x"0000",x"a7c7",x"4434"),
-(x"c414",x"0000",x"afa0",x"4d1a")
-);
-
 
 end model_presets;
 

@@ -4,7 +4,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use work.definitions.all;
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity CU is
 	port(
@@ -13,12 +13,14 @@ entity CU is
 		rd : out std_logic;
 		ce : in std_logic;
 		pixel_out : out PIXEL;
-		data_out_present : out std_logic;
+		pixel_out_rd : out std_logic;
 		pixel_read : in std_logic;
 		tex_load_en : out std_logic;
 		tex_rd : in std_logic;
 		tex_coord : out INT_COORDS;
-		tex_color : in COLOR24
+		tex_color : in COLOR24;
+		operation : out integer;
+		instruction_number : out integer
 	);
 end CU;
 
@@ -31,7 +33,7 @@ component GS
 			ce : in std_logic;
 			data_in : in MOD_TRIANGLE;
 			pixel_out : out PIXEL; --data for RT
-			data_out_present : out std_logic;
+			pixel_out_rd : out std_logic;
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic;
 			tex_rd : in std_logic;
@@ -43,7 +45,8 @@ component GS
 			fpu_b_data : out FLOAT16;
 			fpu_res_data : in FLOAT16;
 			fpu_operation_valid : out std_logic := '0';
-			fpu_res_valid : in std_logic
+			fpu_res_valid : in std_logic;
+			instruction_number : out integer
 			);
 end component;
 			
@@ -78,7 +81,7 @@ begin
 
 		data_in => mod_triangle_sig,
 		pixel_out => pixel_out,
-		data_out_present =>data_out_present,
+		pixel_out_rd => pixel_out_rd,
 		pixel_read => pixel_read,
 		tex_load_en => tex_load_en,
 		tex_rd => tex_rd,
@@ -89,7 +92,8 @@ begin
 		fpu_b_data => fpu_b_data,
 		fpu_res_data => fpu_res_data,
 		fpu_operation_valid => fpu_operation_valid,
-		fpu_res_valid => fpu_res_valid
+		fpu_res_valid => fpu_res_valid,
+		instruction_number => instruction_number
   );
 	
   fpu_entity : fpu PORT MAP (
@@ -110,6 +114,8 @@ begin
 		mod_triangle_sig <= reg_mod_triangle;
     end if;
   end process;
+  
+  operation <= to_integer(unsigned(fpu_operation_data));
 
 end Behavioral;
 

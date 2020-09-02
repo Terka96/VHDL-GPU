@@ -11,6 +11,7 @@ entity FB is
 			clk : in std_logic; --system clock
 			data_in : in std_logic;
 			pixel_in : in PIXEL;
+			pixel_drawn : out std_logic := '0';
 			rd : out std_logic;
 			-- VGA DRIVER
 			vga_vsync : out std_logic;
@@ -77,6 +78,7 @@ if rising_edge(clk) then
 				fpu_b_data <= frame_buf(to_integer(pixel_in.position.coord_Y))(to_integer(pixel_in.position.coord_X)).depth;
 				fpu_a_valid <= '1';
 				fpu_b_valid <= '1';
+				pixel_drawn <= '0';
 				fbstate := WAIT_FOR_COMPARISON;
 			end if;
 			rd <= '1';
@@ -84,6 +86,7 @@ if rising_edge(clk) then
 			if fpu_res_valid ='1' then
 					if fpu_cmp_result(0) = '1' then --a < b
 						frame_buf(to_integer(pixel_in.position.coord_Y))(to_integer(pixel_in.position.coord_X)) := pixel_in;
+						pixel_drawn <= '1';
 					end if;
 				fbstate := WAIT_FOR_DATA;
 			end if;

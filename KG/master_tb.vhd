@@ -3,6 +3,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.definitions.all;
 
 entity master_tb is
 end master_tb;
@@ -33,6 +34,9 @@ component vga_tb is
 		);
 end component;
 
+component metrics_tb is
+end component;
+
 signal clk : std_logic := '0';
 signal vga_vsync : std_logic;
 signal vga_hsync : std_logic;
@@ -40,6 +44,8 @@ signal vga_clk : std_logic;
 signal vga_r : std_logic_vector( 7 downto 0 );
 signal vga_g : std_logic_vector( 7 downto 0 );
 signal vga_b : std_logic_vector( 7 downto 0 );
+
+signal cu_pc_data : std_logic_vector(1 to CU_COUNT);
 begin
 
   top_entity : top port map(
@@ -62,6 +68,7 @@ begin
 		vga_b => vga_b
   );
   
+
 process is
 begin
   wait for 10 ns;

@@ -7,6 +7,8 @@ package model_presets is
 
 subtype MM_ADDRESS is integer range 0 to 16;
 constant AVAILABLE_TRIANGLES : integer := 12;
+type MODEL_MEM is array (0 to 15) of MOD_TRIANGLE;
+
 
 --tyl/przod/lewa/prawa/dol/gora
 constant model_const : MODEL_MEM :=(
