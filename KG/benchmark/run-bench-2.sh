@@ -21,5 +21,7 @@ ln -s $DIRNAME/frames frames
 #RUN
 ghdl -r master_tb --stop-time=20000ms
 #nice parameters: --wave=vga.ghw --disp-tree=inst --stop-time=20000ns
+#make report
+./plot_graphs.py run_logs/ 
 #clean symlinks
 rm run_logs frames

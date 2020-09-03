@@ -11,7 +11,7 @@ constant SCREEN_WIDTH : integer := 640;
 constant SCREEN_HEIGHT : integer := 480;
 constant HALF_SCREEN_WIDTH_F : FLOAT16 := x"5d00";
 constant HALF_SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
-constant CU_COUNT : integer := 1;
+constant CU_COUNT : integer := 4;
 
 type TRANSFORM_MATRIX is array (0 to 3,0 to 3) of FLOAT16;
 

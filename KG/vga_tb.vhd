@@ -4,8 +4,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 --use ieee.numeric_std.all;
-use std.textio.all;
 use work.definitions.all;
+use std.textio.all;
 
 entity vga_tb is
 	port (		
@@ -50,11 +50,6 @@ begin
 		  write(l, space);
 		  write(l, to_str(vga_b));
 		  writeline(file_pointer,l);
-		  
-		  
-		  --write(l, to_integer(unsigned(vga_r))));
-		  --write(l, 'val(to_integer(unsigned(vga_g))));
-		  --write(l, character'val(to_integer(unsigned(vga_b))));
 
     end if;
 end process;

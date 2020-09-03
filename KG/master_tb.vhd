@@ -45,7 +45,6 @@ signal vga_r : std_logic_vector( 7 downto 0 );
 signal vga_g : std_logic_vector( 7 downto 0 );
 signal vga_b : std_logic_vector( 7 downto 0 );
 
-signal cu_pc_data : std_logic_vector(1 to CU_COUNT);
 begin
 
   top_entity : top port map(

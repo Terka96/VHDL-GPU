@@ -78,9 +78,9 @@ if rising_edge(clk) then
 				fpu_b_data <= frame_buf(to_integer(pixel_in.position.coord_Y))(to_integer(pixel_in.position.coord_X)).depth;
 				fpu_a_valid <= '1';
 				fpu_b_valid <= '1';
-				pixel_drawn <= '0';
 				fbstate := WAIT_FOR_COMPARISON;
 			end if;
+			pixel_drawn <= '0';
 			rd <= '1';
 		when WAIT_FOR_COMPARISON =>
 			if fpu_res_valid ='1' then

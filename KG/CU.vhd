@@ -19,7 +19,7 @@ entity CU is
 		tex_rd : in std_logic;
 		tex_coord : out INT_COORDS;
 		tex_color : in COLOR24;
-		operation : out integer;
+		operation : out integer :=0;
 		instruction_number : out integer
 	);
 end CU;
@@ -33,7 +33,7 @@ component GS
 			ce : in std_logic;
 			data_in : in MOD_TRIANGLE;
 			pixel_out : out PIXEL; --data for RT
-			pixel_out_rd : out std_logic;
+			pixel_out_rd : out std_logic := '0';
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic;
 			tex_rd : in std_logic;
@@ -115,7 +115,8 @@ begin
     end if;
   end process;
   
-  operation <= to_integer(unsigned(fpu_operation_data));
+	operation <= to_integer(unsigned(fpu_operation_data));
+
 
 end Behavioral;
 

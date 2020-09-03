@@ -57,8 +57,8 @@ if rising_edge(clk) then
 	else	--data_preloaded = '0'
 		if mm_rd = '1' and triangle_address <= AVAILABLE_TRIANGLES then			--to trzeba ten +1 czy nie? :o
 			data_preloaded := '1';
-			cu_ce <= (others => '0');
-		end if;
+		end if;     
+		cu_ce <= (others => '0');
 	end if;
 	i := i + 1;
 end if;

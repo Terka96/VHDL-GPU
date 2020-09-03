@@ -35,7 +35,7 @@ begin
 		else
 		  rd_out <= '1';
 		end if;
-		color <= memory(to_integer(addr.coord_Y))(to_integer(addr.coord_X));
+		color <= memory(to_integer(addr.coord_X))(to_integer(addr.coord_Y));
 	 end if;
   end process;
 
