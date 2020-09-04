@@ -29,8 +29,8 @@ public class Viewport {
     }
     private static void drawFrame(Perspective perspective, Canvas canvas, Geometry model, float rotation){
         canvas.clearToColor(new Colour(0,0.5f,0));
-        perspective.calculateProjectionMatrix(new Point3f(0.0f,1.0f,-5.0f),new Point3f(0.0f,1.6f,0.0f),90.0f);  //cube
-        //perspective.calculateProjectionMatrix(new Point3f(0.0f,1.1f,-2.5f),new Point3f(0.0f,rotation + 3.80f,0.0f),50.0f); //furniture
+        perspective.calculateProjectionMatrix(new Point3f(0.0f,1.0f,-9.0f),new Point3f(0.0f,1.57f,0.0f),40.0f);  //cube
+        //perspective.calculateProjectionMatrix(new Point3f(0.0f,1.1f,-2.5f),new Point3f(0.0f,3.80f,0.0f),50.0f); //furniture
         model.draw(perspective,canvas);
         showFrame(canvas);
     }

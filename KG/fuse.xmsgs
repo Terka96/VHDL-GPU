@@ -5,6 +5,9 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
+<msg type="warning" file="HDLCompiler" num="1318" delta="unknown" >"/home/terka/Documents/Studia/VHDL-GPU/KG/FB.vhd" Line 177: Left bound value &lt;<arg fmt="%s" index="1">28</arg>&gt; of slice is out of range <arg fmt="%s" index="2">[23:0]</arg> of array &lt;<arg fmt="%s" index="3">draw_color_reg</arg>&gt;
+</msg>
+
 <msg type="warning" file="HDLCompiler" num="746" delta="unknown" >"/build/xfndry10/P.20131013/rtf/vhdl/src/XilinxCoreLib/floating_point_v6_1.vhd" Line 1281: Range is empty (null range)
 </msg>
 

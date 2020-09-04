@@ -19,7 +19,7 @@ entity GS is
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic := '0';
 			tex_rd : in std_logic;
-			tex_coord : out INT_COORDS := ("0000000000","0000000000");
+			tex_coord : out INT_COORDS := ("0000000000000","0000000000000");
 			tex_color : in COLOR24;
 			
 			fpu_operation_data : out std_logic_vector(3 downto 0);
@@ -45,7 +45,7 @@ variable light_norm_Y : FLOAT16 := light_norm_Y_const;
 variable light_norm_Z : FLOAT16 := light_norm_Z_const;
 
 type registers is array (1 to 40) of FLOAT16;
-type int_registers is array (1 to 11) of signed(9 downto 0);
+type int_registers is array (1 to 11) of signed(12 downto 0);
 
 variable pixel_data : PIXEL;
 variable reg : registers;
@@ -296,32 +296,32 @@ instruction_number <= state;
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 42 => --rzutowania x i y do int
-				ireg(10) := signed(reg(1)(9 downto 0));
+				ireg(10) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(26);
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 43 => --rzutowania x i y do int
-				ireg(9) := signed(reg(1)(9 downto 0));
+				ireg(9) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(25);
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 44 => --rzutowania x i y do int
-				ireg(8) := signed(reg(1)(9 downto 0));
+				ireg(8) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(24);
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 45 => --rzutowania x i y do int
-				ireg(7) := signed(reg(1)(9 downto 0));
+				ireg(7) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(23);
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 46 => --rzutowania x i y do int
-				ireg(6) := signed(reg(1)(9 downto 0));
+				ireg(6) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(22);
 				fpu_operation_data <= "1100";
 				result_reg := 1;
 			when 47 => --parametry dzielenie przez w
-				ireg(5) := signed(reg(1)(9 downto 0));
+				ireg(5) := signed(reg(1)(12 downto 0));
 				fpu_a_data <= reg(21);
 				fpu_b_data <= reg(30);
 				fpu_operation_data <= "0010";
@@ -406,6 +406,9 @@ instruction_number <= state;
 				if ireg(8) < ireg(4) then
 					ireg(4) := ireg(8);
 				end if;
+				if ireg(4) < 1 then
+					ireg(4) := "0000000000000";
+				end if;
 				-- minY
 				if ireg(7) < ireg(6) then
 					ireg(3) := ireg(7);
@@ -414,6 +417,9 @@ instruction_number <= state;
 				end if;
 				if ireg(5) < ireg(3) then
 					ireg(3) := ireg(5);
+				end if;
+				if ireg(3) < 1 then
+					ireg(3) := "0000000000000";
 				end if;
 				ireg(11) := ireg(4);
 				nop := '1';
@@ -427,6 +433,9 @@ instruction_number <= state;
 				if ireg(8) > ireg(2) then
 					ireg(2) := ireg(8);
 				end if;
+				if ireg(2) > SCREEN_WIDTH then
+					ireg(2) := to_signed(SCREEN_WIDTH,13);
+				end if;
 				-- maxY
 				if ireg(7) > ireg(6) then
 					ireg(1) := ireg(7);
@@ -435,6 +444,9 @@ instruction_number <= state;
 				end if;
 				if ireg(5) > ireg(1) then
 					ireg(1) := ireg(5);
+				end if;
+				if ireg(1) > SCREEN_HEIGHT then
+					ireg(1) := to_signed(SCREEN_HEIGHT,13);
 				end if;
 				nop := '1';
 			when 64 => --area
@@ -487,17 +499,13 @@ instruction_number <= state;
 					nop := '1';
 				end if;
 			when 73 =>
-				if ireg(3) > SCREEN_HEIGHT or ireg(3) < 1 or ireg(4) > SCREEN_WIDTH or ireg(4) < 1 then
-					jump := CONTINUE_FORX;
-				else
-					nop := '1';
-				end if;
+				nop := '1';
 			when 74 => --iterX
-				fpu_a_data(9 downto 0) <= std_logic_vector(ireg(4));
+				fpu_a_data(12 downto 0) <= std_logic_vector(ireg(4));
 				fpu_operation_data <= "1101";
 				result_reg := 9;
 			when 75 => --iterY
-				fpu_a_data(9 downto 0) <= std_logic_vector(ireg(3));
+				fpu_a_data(12 downto 0) <= std_logic_vector(ireg(3));
 				fpu_operation_data <= "1101";
 				result_reg := 8;
 			when 76 => --w0
@@ -784,9 +792,9 @@ instruction_number <= state;
 				fpu_operation_data <= "0011";
 				result_reg := 1;	
 			when 132 => --interpolacja Z
-				fpu_a_data <= reg(35);	
+				fpu_a_data <= x"3c00";	
 				fpu_b_data <= reg(1);
-				fpu_operation_data <= "0001";
+				fpu_operation_data <= "0010";
 				result_reg := 39;
 			when 133 => --scale from U to S
 				fpu_a_data <= reg(36);	
@@ -812,14 +820,14 @@ instruction_number <= state;
 				result_reg := 38;
 --WAIT FOR TEXEL
 			when 138 =>
-				tex_coord.coord_X <= signed("0000011111" and reg(36)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
-				tex_coord.coord_Y <= signed("0000011111" and reg(37)(9 downto 0));	--TAKE ONLY FIRST 5 BIT (FASTER MODULO 64)
-				tex_load_en <='1';		-- powinien byc jedynka przez jeden cykl!
+				tex_coord.coord_X <= signed(TEX_MODULO and reg(36)(12 downto 0));	--TAKE ONLY FIRST 6 BITS (FASTER MODULO 64)
+				tex_coord.coord_Y <= signed(TEX_MODULO and reg(37)(12 downto 0));	--TAKE ONLY FIRST 6 BITS (FASTER MODULO 64)
 				if tex_rd = '1' then
 					tex_load_en <='0';
 					pixel_data.color := tex_color;
 					nop := '1';
 				else 
+					tex_load_en <='1'; -- powinien byc jedynka przez jeden cykl!
 					jump := WAIT_FOR_TEXEL;
 				end if;
 			when 139 =>	--rysowanie pixela

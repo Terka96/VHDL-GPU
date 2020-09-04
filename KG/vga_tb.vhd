@@ -28,7 +28,7 @@ process (clk) is
 	 variable l : line;
 	 variable frame : integer := 0;
 	 variable magic_number : string(1 to 2) := "P3";
-	 variable resolution : string(1 to 11) := "640 480 255";
+	 variable resolution : string(1 to 11) := "320 240 255";--"640 480 255";
 	 variable space : string(1 to 1) := " ";
 begin
     if rising_edge(clk) then

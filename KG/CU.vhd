@@ -37,7 +37,7 @@ component GS
 			pixel_read : in std_logic;
 			tex_load_en : out std_logic;
 			tex_rd : in std_logic;
-			tex_coord : out INT_COORDS := ("0000000000","0000000000");
+			tex_coord : out INT_COORDS := ("0000000000000","0000000000000");
 			tex_color : in COLOR24;
 			
 			fpu_operation_data : out std_logic_vector(3 downto 0);

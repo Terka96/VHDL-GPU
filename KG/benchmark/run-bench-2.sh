@@ -1,4 +1,5 @@
 #!/bin/sh
+rm work2/*
 cd work2
 #add xilinx ipcore sources
 ghdl -i --work=xilinxcorelib /opt/Xilinx/14.7/ISE_DS/ISE/vhdl/src/XilinxCoreLib/*.vhd
@@ -22,6 +23,6 @@ ln -s $DIRNAME/frames frames
 ghdl -r master_tb --stop-time=20000ms
 #nice parameters: --wave=vga.ghw --disp-tree=inst --stop-time=20000ns
 #make report
-./plot_graphs.py run_logs/ 
+../plot_graphs.py run_logs/ 
 #clean symlinks
 rm run_logs frames

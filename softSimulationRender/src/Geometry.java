@@ -160,7 +160,7 @@ public class Geometry {
                         float tu = (w0 * v1tu + w1 * v2tu + w2 * v3tu)*w;
                         float tv = (w0 * v1tv + w1 * v2tv + w2 * v3tv)*w;
                         float l =  (w0 * v1l + w1 * v2l + w2 * v3l)*w;
-                        float z =  (w0 * v1z + w1 * v2z + w2 * v3z)*w;
+                        float z =  1.0f /(w0 * v1z + w1 * v2z + w2 * v3z);
                         canvas.drawTexel(x,y,z,l,tu,-tv);
                     }
                 }

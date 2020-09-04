@@ -61,14 +61,14 @@ fpu_cmp_fb_entity : fpu_cmp_fb PORT MAP (
 process (clk) is
 variable cur_X : integer :=1;
 variable cur_Y : integer :=1;
-variable frame_buf : frame := (others => (others => (("0000000000","0000000000"),x"000000",x"7c00")));
+variable frame_buf : frame := (others => (others => (("0000000000000","0000000000000"),x"000000",x"7c00")));
 type state is (CLEAR_BUF,WAIT_FOR_DATA,WAIT_FOR_COMPARISON);
 variable fbstate : state := WAIT_FOR_DATA;
 begin
 if rising_edge(clk) then
 	case fbstate is
 		when CLEAR_BUF =>
-			frame_buf(cur_Y)(cur_X) := (("0000000000","0000000000"),x"000000",x"7c00");
+			frame_buf(cur_Y)(cur_X) := (("0000000000000","000000000000"),x"000000",x"7c00");
 			if cur_X = (SCREEN_WIDTH - 1) and cur_Y = (SCREEN_HEIGHT - 1) then
 				fbstate := WAIT_FOR_DATA;
 			end if;

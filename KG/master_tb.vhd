@@ -67,7 +67,6 @@ begin
 		vga_b => vga_b
   );
   
-
 process is
 begin
   wait for 10 ns;

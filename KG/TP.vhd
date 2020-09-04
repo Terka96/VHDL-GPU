@@ -26,7 +26,7 @@ component TM is
 			color : out COLOR24
 		);
 end component;
-signal address : INT_COORDS := ("0000000000","0000000000");
+signal address : INT_COORDS := ("0000000000000","0000000000000");
 signal tex_rd : std_logic;
 
 begin

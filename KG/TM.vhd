@@ -22,7 +22,7 @@ architecture Behavioral of TM is
 
 begin
   process (clk) is
-  variable addr_out : INT_COORDS := ("0000000000","0000000000");
+  variable addr_out : INT_COORDS := ("0000000000000","0000000000000");
   variable memory : TEXTURE_MEM := texture_memory_const;
 
 --others => (others => x"ffffff"));

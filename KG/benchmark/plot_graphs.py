@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #params
-cu = 4
+cu = 1
 inst = 144 #143 + 1
 oper = 16
 
@@ -10,6 +10,11 @@ import math
 import statistics
 
 workingdir = sys.argv[1]
+if len(sys.argv) >= 3:
+	stopat = sys.argv[2]	#in miliseconds
+else:
+	stopat = ''
+
 
 count_instruction = [0 for i in range(inst)]
 count_operation = [0 for i in range(oper)]
@@ -22,23 +27,22 @@ fb_utilization = []
 cu_utilization = [[] for i in range(cu)]
 cycles_cu_waiting_for_pixel_poll = [[] for i in range(cu)]
 cycles_cu_waiting_for_texel = [[] for i in range(cu)]
-timeline = []
 
 #read the data
 cyclesinwindow = 25000
 ts = open(sys.argv[1]+"time_series","r")
 line = ts.readline()
 timesample = 0
-while (line != ''):
+while (not(line == '' or (stopat != '' and timesample > 2*int(stopat)))):
 	splitted = line.split(" ")
-	timeline += [int((timesample+1)/2)]
 	generated_pixels += [int(splitted[2])]
 	drawn_pixels += [int(splitted[3])]
 	prepared_texels += [int(splitted[4])]	
 	fb_utilization += [int(splitted[5])/cyclesinwindow]
-	for i in range(4):
+	for i in range(cu):
 		line = ts.readline()
 		cusplit = line.split(" ")
+
 		cu_utilization[i] += [(int(cusplit[1])-int(cusplit[2])-int(cusplit[3]))/cyclesinwindow]
 		cycles_cu_waiting_for_pixel_poll[i] += [int(cusplit[2])]
 		cycles_cu_waiting_for_texel[i] += [int(cusplit[3])]
@@ -68,7 +72,7 @@ grouped_pt = [sum(prepared_texels[i:i+group]) for i in range(0, len(prepared_tex
 grouped_fbu = [statistics.mean(fb_utilization[i:i+group]) for i in range(0, len(fb_utilization), group)]
 for j in range(cu):
 	grouped_cuu.insert(j,[statistics.mean(cu_utilization[j][i:i+group]) for i in range(0, len(cu_utilization[j]), group)])
-timeline = range(0,timesample, group)
+timeline = [int(i/2) for i in range(0,timesample, group)]
 
 #plot
 plt.bar(range(inst),[x/1000000 for x in count_instruction], color = 'blue')

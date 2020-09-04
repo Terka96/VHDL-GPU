@@ -38,7 +38,7 @@ MM_entity : MM port map(
 	);
 
 process(clk,mm_rd) is
-variable triangle_address : MM_ADDRESS := 1;
+variable triangle_address : MM_ADDRESS := 0;
 variable data_preloaded : std_logic := '0';
 variable i : integer := 1;
 begin
@@ -50,12 +50,12 @@ if rising_edge(clk) then
 		if cu_rd(i) = '1' then
 			cu_ce(i) <= '1';
 			data_preloaded := '0';
-			triangle_address := triangle_address + 1;
 		else
 			cu_ce <= (others => '0');
 		end if;
 	else	--data_preloaded = '0'
-		if mm_rd = '1' and triangle_address <= AVAILABLE_TRIANGLES then			--to trzeba ten +1 czy nie? :o
+		if mm_rd = '1' and triangle_address < AVAILABLE_TRIANGLES then
+			triangle_address := triangle_address + 1;
 			data_preloaded := '1';
 		end if;     
 		cu_ce <= (others => '0');

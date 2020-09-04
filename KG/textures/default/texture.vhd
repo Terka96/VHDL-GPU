@@ -6,6 +6,7 @@ package texture is
 
 constant TEX_SIZE_F : FLOAT16 := x"5400";
 constant TEX_SIZE	: integer := 64;
+constant TEX_MODULO : std_logic_vector(12 downto 0) := "0000000111111";
 type TEXTURE_MEM_LINE is array (0 to (TEX_SIZE-1)) of COLOR24;
 type TEXTURE_MEM is array (0 to (TEX_SIZE-1)) of TEXTURE_MEM_LINE;
 

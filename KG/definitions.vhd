@@ -7,18 +7,18 @@ package definitions is
 subtype FLOAT16 is std_logic_vector(15 downto 0);
 subtype COLOR24 is std_logic_vector(23 downto 0);
 
-constant SCREEN_WIDTH : integer := 640;
-constant SCREEN_HEIGHT : integer := 480;
-constant HALF_SCREEN_WIDTH_F : FLOAT16 := x"5d00";
-constant HALF_SCREEN_HEIGHT_F : FLOAT16 := x"5b80";
-constant CU_COUNT : integer := 4;
+constant SCREEN_WIDTH : integer := 320;
+constant SCREEN_HEIGHT : integer := 240;
+constant HALF_SCREEN_WIDTH_F : FLOAT16 := x"5900"; --x"5d00";
+constant HALF_SCREEN_HEIGHT_F : FLOAT16 := x"5780"; --x"5b80";
+constant CU_COUNT : integer := 1;
 
 type TRANSFORM_MATRIX is array (0 to 3,0 to 3) of FLOAT16;
 
 type INT_COORDS is
   record
-     coord_X			: signed( 9 downto 0 );
-     coord_Y			: signed( 9 downto 0 );
+     coord_X			: signed( 12 downto 0 );
+     coord_Y			: signed( 12 downto 0 );
   end record;
 
 
