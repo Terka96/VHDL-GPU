@@ -1,0 +1,15 @@
+# Output products list for <frame_buffer_memory>
+_xmsgs/pn_parser.xmsgs
+frame_buffer_memory/blk_mem_gen_v7_3_readme.txt
+frame_buffer_memory/doc/blk_mem_gen_v7_3_vinfo.html
+frame_buffer_memory/doc/pg058-blk-mem-gen.pdf
+frame_buffer_memory.asy
+frame_buffer_memory.gise
+frame_buffer_memory.ngc
+frame_buffer_memory.vhd
+frame_buffer_memory.vho
+frame_buffer_memory.xco
+frame_buffer_memory.xise
+frame_buffer_memory_flist.txt
+frame_buffer_memory_xmdf.tcl
+summary.log
