@@ -68,7 +68,7 @@ begin
 if rising_edge(clk) then
 	case fbstate is
 		when CLEAR_BUF =>
-			frame_buf(cur_Y)(cur_X) := (("0000000000000","000000000000"),x"000000",x"7c00");
+			frame_buf(cur_Y)(cur_X) := (("0000000000000","0000000000000"),x"000000",x"7c00");
 			if cur_X = (SCREEN_WIDTH - 1) and cur_Y = (SCREEN_HEIGHT - 1) then
 				fbstate := WAIT_FOR_DATA;
 			end if;
