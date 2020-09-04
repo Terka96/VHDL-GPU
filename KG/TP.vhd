@@ -40,26 +40,31 @@ TM_entity : TM port map(
 
 process (clk) is
 variable i : integer := 1;
-variable w : integer := 0; --waiting for data for
+type state is (POLL_TEX, RESPONSE, SCAN);
+variable s : state := SCAN;
 begin
 if rising_edge(clk) then
-	if i > CU_COUNT then
-		i := 1;
-	end if;
-	if w /= 0 then
-		rd_out(w) <= tex_rd;
-		if tex_rd = '1' then
-			w := 0;
-		end if;
-	else
-		rd_out <= (others => '0');
-		if load_en(i) = '1' then
-			address <= addr(i);
-			w := i;
-		else 
-			i := i + 1;
-		end if;
-	end if;
+	case s is
+		when SCAN =>
+			rd_out <= (others => '0');
+			if load_en(i) = '1' then
+				address <= addr(i);
+				s := POLL_TEX;
+			else 
+				i := i + 1;
+			end if;
+			if i > CU_COUNT then
+				i := 1;
+			end if;
+		when POLL_TEX =>
+			rd_out(i) <= tex_rd;
+			if tex_rd = '1' then
+				s := RESPONSE;
+			end if;
+		when RESPONSE =>
+			rd_out <= (others => '0');
+			s := SCAN;
+		end case;
 end if;
 end process;
 end Behavioral;

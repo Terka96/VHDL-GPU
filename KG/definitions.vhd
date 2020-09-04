@@ -48,13 +48,13 @@ type CU_INTEGERS is array (1 to CU_COUNT) of integer;
 
 --JUMP LABELS
 constant BEGIN_GEOMETRY : integer :=			1;
-constant BEGIN_FORY : integer := 				71;
-constant BEGIN_FORX : integer := 				72;
-constant WAIT_FOR_TEXEL : integer :=			138;
-constant WAIT_FOR_DATA_POLL : integer := 		140;
-constant CONTINUE_FORX : integer :=				141;
-constant CONTINUE_FORY : integer :=				142;
-constant END_PROGRAMME : integer :=				143;
+constant BEGIN_FORY : integer := 				102;
+constant BEGIN_FORX : integer := 				104;
+constant WAIT_FOR_TEXEL : integer :=			148;
+constant WAIT_FOR_DATA_POLL : integer := 		150;
+constant CONTINUE_FORX : integer :=				151;
+constant CONTINUE_FORY : integer :=				155;
+constant END_PROGRAMME : integer :=				159;
 
 constant empty_m_tri : mod_triangle := ( 
 (geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000"), 

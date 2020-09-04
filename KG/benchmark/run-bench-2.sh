@@ -20,7 +20,7 @@ mkdir $DIRNAME/frames
 ln -s $DIRNAME run_logs
 ln -s $DIRNAME/frames frames
 #RUN
-ghdl -r master_tb --stop-time=20000ms
+ghdl -r master_tb --stop-time=5000ms
 #nice parameters: --wave=vga.ghw --disp-tree=inst --stop-time=20000ns
 #make report
 ../plot_graphs.py run_logs/ 

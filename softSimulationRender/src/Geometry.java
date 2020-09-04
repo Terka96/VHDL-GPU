@@ -85,7 +85,7 @@ public class Geometry {
     }
 
     public void draw(Perspective perspective,Canvas canvas){
-        for(Triangle triangle : triangles){
+        for(Triangle triangle : triangles) {
             Vertex[] vertices3d = triangle.getVertices();
             vertices3d[0].projected = perspective.projectPoint(vertices3d[0].geo);
             vertices3d[1].projected = perspective.projectPoint(vertices3d[1].geo);
@@ -104,11 +104,11 @@ public class Geometry {
             //Point3f lightDir = new Point3f(center.getX()-lightPos.getX(),center.getY()-lightPos.getY(),center.getZ()-lightPos.getZ()); //POINT LIGHT
             //Point3f lightDir = perspective.transformPointToCam(new Point3f(-1,1,1)); //SUN LIGHT
             //Point3f lightDir = new Point3f(1.7f,1.5f,4.5f); //furniture
-            Point3f lightDir = new Point3f(2.0f,0.5f,0.5f); //cube
-            float lightDist = (float)Math.sqrt(lightDir.x*lightDir.x+lightDir.y*lightDir.y+lightDir.z*lightDir.z);
-            vertices3d[0].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[0].norm.x+lightDir.y*vertices3d[0].norm.y+lightDir.z*vertices3d[0].norm.z) / lightDist);
-            vertices3d[1].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[1].norm.x+lightDir.y*vertices3d[1].norm.y+lightDir.z*vertices3d[1].norm.z) / lightDist);
-            vertices3d[2].lightLevel = Math.max(0.0f,(lightDir.x*vertices3d[2].norm.x+lightDir.y*vertices3d[2].norm.y+lightDir.z*vertices3d[2].norm.z) / lightDist);
+            Point3f lightDir = new Point3f(2.0f, 0.5f, 0.5f); //cube
+            float lightDist = (float) Math.sqrt(lightDir.x * lightDir.x + lightDir.y * lightDir.y + lightDir.z * lightDir.z);
+            vertices3d[0].lightLevel = Math.max(0.0f, (lightDir.x * vertices3d[0].norm.x + lightDir.y * vertices3d[0].norm.y + lightDir.z * vertices3d[0].norm.z) / lightDist);
+            vertices3d[1].lightLevel = Math.max(0.0f, (lightDir.x * vertices3d[1].norm.x + lightDir.y * vertices3d[1].norm.y + lightDir.z * vertices3d[1].norm.z) / lightDist);
+            vertices3d[2].lightLevel = Math.max(0.0f, (lightDir.x * vertices3d[2].norm.x + lightDir.y * vertices3d[2].norm.y + lightDir.z * vertices3d[2].norm.z) / lightDist);
 
 
             float v1x = vertices3d[0].projected.x;
@@ -120,23 +120,23 @@ public class Geometry {
             float v1w = vertices3d[0].projected.w;
             float v2w = vertices3d[1].projected.w;
             float v3w = vertices3d[2].projected.w;
-            float v1z = vertices3d[0].projected.z/v1w;
-            float v2z = vertices3d[1].projected.z/v2w;
-            float v3z = vertices3d[2].projected.z/v3w;
-            float v1l = vertices3d[0].lightLevel/v1w;
-            float v2l = vertices3d[1].lightLevel/v2w;
-            float v3l = vertices3d[2].lightLevel/v3w;
-            float v1tu = vertices3d[0].uvmap.x/v1w;
-            float v1tv = vertices3d[0].uvmap.y/v1w;
-            float v2tu = vertices3d[1].uvmap.x/v2w;
-            float v2tv = vertices3d[1].uvmap.y/v2w;
-            float v3tu = vertices3d[2].uvmap.x/v3w;
-            float v3tv = vertices3d[2].uvmap.y/v3w;
+            float v1z = vertices3d[0].projected.z / v1w;
+            float v2z = vertices3d[1].projected.z / v2w;
+            float v3z = vertices3d[2].projected.z / v3w;
+            float v1l = vertices3d[0].lightLevel / v1w;
+            float v2l = vertices3d[1].lightLevel / v2w;
+            float v3l = vertices3d[2].lightLevel / v3w;
+            float v1tu = vertices3d[0].uvmap.x / v1w;
+            float v1tv = vertices3d[0].uvmap.y / v1w;
+            float v2tu = vertices3d[1].uvmap.x / v2w;
+            float v2tv = vertices3d[1].uvmap.y / v2w;
+            float v3tu = vertices3d[2].uvmap.x / v3w;
+            float v3tv = vertices3d[2].uvmap.y / v3w;
 
-            int maxX = (int)Math.max(v1x,Math.max(v2x,v3x));
-            int maxY = (int)Math.max(v1y,Math.max(v2y,v3y));
-            int minX = (int)Math.min(v1x,Math.min(v2x,v3x));
-            int minY = (int)Math.min(v1y,Math.min(v2y,v3y));
+            int maxX = (int) Math.max(v1x, Math.max(v2x, v3x));
+            int maxY = (int) Math.max(v1y, Math.max(v2y, v3y));
+            int minX = (int) Math.min(v1x, Math.min(v2x, v3x));
+            int minY = (int) Math.min(v1y, Math.min(v2y, v3y));
 
             v1w = 1.0f / v1w;
             v2w = 1.0f / v2w;
@@ -144,39 +144,44 @@ public class Geometry {
 
 
             float area = (v3x - v1x) * (v2y - v1y) - (v3y - v1y) * (v2x - v1x);
+            if (area > 0) {     //face culling
+                float w0 = (minX - v2x) * (v3y - v2y) - (minY - v2y) * (v3x - v2x);
+                float w1 = (minX - v3x) * (v1y - v3y) - (minY - v3y) * (v1x - v3x);
+                float w2 = (minX - v1x) * (v2y - v1y) - (minY - v1y) * (v2x - v1x);
 
-            for(int y = minY;y <= maxY;y++)
-                for(int x =minX;x <= maxX;x++) {
-                    float w0 =(x - v2x) * (v3y - v2y) - (y - v2y) * (v3x - v2x);
-                    float w1 =(x - v3x) * (v1y - v3y) - (y - v3y) * (v1x - v3x);
-                    float w2 =(x - v1x) * (v2y - v1y) - (y - v1y) * (v2x - v1x);
-                    if (w0 >= 0 && w1 >= 0 && w2 >= 0)
-                    {
-                        w0 /= area;
-                        w1 /= area;
-                        w2 /= area;
+                float w0x = v3y - v2y;
+                float w1x = v1y - v3y;
+                float w2x = v2y - v1y;
+                float w0y = v2x - v3x;
+                float w1y = v3x - v1x;
+                float w2y = v1x - v2x;
 
-                        float w = 1.0f / (w0 * v1w + w1 * v2w + w2 * v3w);
-                        float tu = (w0 * v1tu + w1 * v2tu + w2 * v3tu)*w;
-                        float tv = (w0 * v1tv + w1 * v2tv + w2 * v3tv)*w;
-                        float l =  (w0 * v1l + w1 * v2l + w2 * v3l)*w;
-                        float z =  1.0f /(w0 * v1z + w1 * v2z + w2 * v3z);
-                        canvas.drawTexel(x,y,z,l,tu,-tv);
+                for (int y = minY; y <= maxY; y++) {
+                    float w0xs = w0;
+                    float w1xs = w1;
+                    float w2xs = w2;
+                    for (int x = minX; x <= maxX; x++) {
+                        if (w0xs >= 0 && w1xs >= 0 && w2xs >= 0) {
+                            float w0xsn = w0xs / area;
+                            float w1xsn = w1xs / area;
+                            float w2xsn = w2xs / area;
+
+                            float w = 1.0f / (w0xsn * v1w + w1xsn * v2w + w2xsn * v3w);
+                            float tu = (w0xsn * v1tu + w1xsn * v2tu + w2xsn * v3tu) * w;
+                            float tv = (w0xsn * v1tv + w1xsn * v2tv + w2xsn * v3tv) * w;
+                            float l = (w0xsn * v1l + w1xsn * v2l + w2xsn * v3l) * w;
+                            float z = 1.0f / (w0xsn * v1z + w1xsn * v2z + w2xsn * v3z);
+                            canvas.drawTexel(x, y, z, l, tu, -tv);
+                        }
+                        w0xs += w0x;
+                        w1xs += w1x;
+                        w2xs += w2x;
                     }
+                    w0 += w0y;
+                    w1 += w1y;
+                    w2 += w2y;
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }
         }
     }
 }

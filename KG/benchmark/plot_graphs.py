@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #params
 cu = 1
-inst = 144 #143 + 1
+inst = 160 #161 + 1 #143+1
 oper = 16
 
 import matplotlib.pyplot as plt
@@ -96,7 +96,7 @@ plt.savefig(workingdir+"pixels.png",dpi=3000)
 plt.close()
 
 
-colors=['red','green','blue','orange','pink','yellow']
+colors=['red','green','blue','orange','pink','yellow','gray','lime','red','green']
 plt.plot(timeline,grouped_fbu, color = 'purple')
 for i in range(cu):
 	plt.plot(timeline,grouped_cuu[i], color = colors[i])
