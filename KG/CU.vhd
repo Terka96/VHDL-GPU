@@ -19,7 +19,7 @@ entity CU is
 		tex_rd : in std_logic;
 		tex_coord : out INT_COORDS;
 		tex_color : in COLOR24;
-		operation : out integer :=0;
+		operation_number : out integer :=0;
 		instruction_number : out integer
 	);
 end CU;
@@ -40,7 +40,7 @@ component GS
 			tex_coord : out INT_COORDS := ("0000000000000","0000000000000");
 			tex_color : in COLOR24;
 			
-			fpu_operation_data : out std_logic_vector(3 downto 0);
+			fpu_operation_data : out operation;
 			fpu_a_data : out FLOAT16;
 			fpu_b_data : out FLOAT16;
 			fpu_res_data : in FLOAT16;
@@ -53,7 +53,7 @@ end component;
 COMPONENT fpu
   PORT (
 			clk : in std_logic; --system clock
-			fpu_operation_data : in std_logic_vector(3 downto 0);
+			fpu_operation_data : in operation;
 			fpu_a_data : in FLOAT16;
 			fpu_b_data : in FLOAT16;
 			fpu_res_data : out FLOAT16;
@@ -66,7 +66,7 @@ END COMPONENT;
 shared variable reg_mod_triangle : MOD_TRIANGLE;
 signal mod_triangle_sig : MOD_TRIANGLE;
 
-signal fpu_operation_data : std_logic_vector(3 downto 0);
+signal fpu_operation_data : operation;
 signal fpu_a_data : FLOAT16;
 signal fpu_b_data : FLOAT16;
 signal fpu_res_data : FLOAT16;
@@ -115,7 +115,14 @@ begin
     end if;
   end process;
   
-	operation <= to_integer(unsigned(fpu_operation_data));
+	operation_number <= 0 when fpu_operation_data = OP_NOP else
+					1 when fpu_operation_data = OP_FMUL else
+					2 when fpu_operation_data = OP_FDIV else
+					3 when fpu_operation_data = OP_FADD else
+					4 when fpu_operation_data = OP_FSUB else
+					12 when fpu_operation_data = OP_FF2I else
+					13 when fpu_operation_data = OP_FI2F else
+					15;
 
 
 end Behavioral;

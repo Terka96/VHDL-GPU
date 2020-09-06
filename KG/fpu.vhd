@@ -8,7 +8,7 @@ use work.definitions.all;
 entity fpu is
 	port(
 			clk : in std_logic; --system clock
-			fpu_operation_data : in std_logic_vector(3 downto 0);
+			fpu_operation_data : in operation;
 			fpu_a_data : in FLOAT16;
 			fpu_b_data : in FLOAT16;
 			fpu_res_data : out FLOAT16;
@@ -19,7 +19,7 @@ end fpu;
 
 architecture Behavioral of fpu is
 
-signal reg_fpu_operation_data : std_logic_vector (3 downto 0) := "0000";
+signal reg_fpu_operation_data : operation := OP_NOP;
 
 signal fpu_mul_enable : std_logic := '0';
 signal fpu_div_enable : std_logic := '0';
@@ -43,7 +43,7 @@ signal fpu_f2i_res_valid : std_logic;
 signal fpu_i2f_res_valid : std_logic;
 
 
-COMPONENT fpu_mul --"0001"
+COMPONENT fpu_mul --FPU_MUL
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_a_tvalid : IN STD_LOGIC;
@@ -55,7 +55,7 @@ COMPONENT fpu_mul --"0001"
   );
 END COMPONENT;
 
-COMPONENT fpu_add --"0011" "0100"
+COMPONENT fpu_add --FPU_ADD FPU_SUB
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_a_tvalid : IN STD_LOGIC;
@@ -69,7 +69,7 @@ COMPONENT fpu_add --"0011" "0100"
   );
 END COMPONENT;
 
-COMPONENT fpu_div --"0010"
+COMPONENT fpu_div --FPU_DIV
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_a_tvalid : IN STD_LOGIC;
@@ -81,7 +81,7 @@ COMPONENT fpu_div --"0010"
   );
 END COMPONENT;
 
-COMPONENT fpu_f2i --"1100"
+COMPONENT fpu_f2i --FPU_F2I
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_a_tvalid : IN STD_LOGIC;
@@ -91,7 +91,7 @@ COMPONENT fpu_f2i --"1100"
   );
 END COMPONENT;
 
-COMPONENT fpu_i2f --"1101"
+COMPONENT fpu_i2f --FPU_I2F
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_a_tvalid : IN STD_LOGIC;
@@ -151,11 +151,11 @@ fpu_i2f_entity : fpu_i2f PORT MAP (
     m_axis_result_tdata => fpu_i2f_res_data
   );
   
---"0000" NOP
---"0001" mul
---"0010" div
---"0011" add
---"0100" sub
+--"0000" FPU_NOP
+--"0001" FPU_MUL
+--"0010" FPU_DIV
+--"0011" FPU_ADD
+--"0100" FPU_SUB
 --"0101" lt
 --"0110" eq
 --"0111" le
@@ -163,35 +163,35 @@ fpu_i2f_entity : fpu_i2f PORT MAP (
 --"1001" ne
 --"1010" ge
 --"1011" is NaN?
---"1100" f2i
---"1101" i2f
+--"1100" FPU_F2I
+--"1101" FPU_I2F
 --"1110"
 --"1111"
 
 
-fpu_mul_enable <= fpu_operation_valid when reg_fpu_operation_data = "0001" else '0';
-fpu_div_enable <= fpu_operation_valid when reg_fpu_operation_data = "0010" else '0';
-fpu_add_enable <= fpu_operation_valid when (reg_fpu_operation_data = "0011" or reg_fpu_operation_data = "0100") else '0';
-fpu_f2i_enable <= fpu_operation_valid when reg_fpu_operation_data = "1100" else '0';
-fpu_i2f_enable <= fpu_operation_valid when reg_fpu_operation_data = "1101" else '0';
+fpu_mul_enable <= fpu_operation_valid when reg_fpu_operation_data = OP_FMUL else '0';
+fpu_div_enable <= fpu_operation_valid when reg_fpu_operation_data = OP_FDIV else '0';
+fpu_add_enable <= fpu_operation_valid when (reg_fpu_operation_data = OP_FADD or reg_fpu_operation_data = OP_FSUB) else '0';
+fpu_f2i_enable <= fpu_operation_valid when reg_fpu_operation_data = OP_FF2I else '0';
+fpu_i2f_enable <= fpu_operation_valid when reg_fpu_operation_data = OP_FI2F else '0';
   
-fpu_operation_add_data <= "00000000" when reg_fpu_operation_data = "0011" else	--add
-									"00000001" when reg_fpu_operation_data = "0100" else	--subtract
+fpu_operation_add_data <= "00000000" when reg_fpu_operation_data = OP_FADD else	--add
+									"00000001" when reg_fpu_operation_data = OP_FSUB else	--subtract
 									"00000000";
 
 
-fpu_res_data <= fpu_mul_res_data when (reg_fpu_operation_data = "0001") else
-					fpu_div_res_data when (reg_fpu_operation_data = "0010") else
-					fpu_add_res_data when (reg_fpu_operation_data = "0011" or reg_fpu_operation_data = "0100") else
-					"0000001111111111" and fpu_f2i_res_data when (reg_fpu_operation_data = "1100") else
-					fpu_i2f_res_data when (reg_fpu_operation_data = "1101") else
+fpu_res_data <= fpu_mul_res_data when (reg_fpu_operation_data = OP_FMUL) else
+					fpu_div_res_data when (reg_fpu_operation_data = OP_FDIV) else
+					fpu_add_res_data when (reg_fpu_operation_data = OP_FADD or reg_fpu_operation_data = OP_FSUB) else
+					"0000001111111111" and fpu_f2i_res_data when (reg_fpu_operation_data = OP_FF2I) else
+					fpu_i2f_res_data when (reg_fpu_operation_data = OP_FI2F) else
 					"XXXXXXXXXXXXXXXX";
 
-fpu_res_valid <= fpu_mul_res_valid when (reg_fpu_operation_data = "0001") else
-					fpu_div_res_valid when (reg_fpu_operation_data = "0010") else
-					fpu_add_res_valid when (reg_fpu_operation_data = "0011" or reg_fpu_operation_data = "0100") else
-					fpu_f2i_res_valid when (reg_fpu_operation_data = "1100") else
-					fpu_i2f_res_valid when (reg_fpu_operation_data = "1101") else
+fpu_res_valid <= fpu_mul_res_valid when (reg_fpu_operation_data = OP_FMUL) else
+					fpu_div_res_valid when (reg_fpu_operation_data = OP_FDIV) else
+					fpu_add_res_valid when (reg_fpu_operation_data = OP_FADD or reg_fpu_operation_data = OP_FSUB) else
+					fpu_f2i_res_valid when (reg_fpu_operation_data = OP_FF2I) else
+					fpu_i2f_res_valid when (reg_fpu_operation_data = OP_FI2F) else
 					'X';
 					
 process (fpu_operation_valid) is

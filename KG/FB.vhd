@@ -37,8 +37,20 @@ COMPONENT fpu_cmp_fb
   );
 END COMPONENT;
 
-type line is array (1 to SCREEN_WIDTH) of PIXEL;
-type frame is array (1 to SCREEN_HEIGHT) of line;
+COMPONENT frame_buffer_memory
+  PORT (
+    clka : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(44 DOWNTO 0);
+    douta : OUT STD_LOGIC_VECTOR(44 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+    dinb : IN STD_LOGIC_VECTOR(44 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(44 DOWNTO 0)
+  );
+END COMPONENT;
 
 signal fpu_a_valid : std_logic;
 signal fpu_b_valid : std_logic;
@@ -46,6 +58,15 @@ signal fpu_res_valid : std_logic;
 signal fpu_a_data : FLOAT16;
 signal fpu_b_data : FLOAT16;
 signal fpu_cmp_result : std_logic_vector(7 downto 0);
+
+type dout is array(1 to SCREEN_HEIGHT) of std_logic_vector(44 downto 0);
+
+signal fb_addra : std_logic_vector(9 downto 0) := (others => '0');
+signal fb_addrb : std_logic_vector(9 downto 0) := (others => '0');
+signal fb_we : std_logic_vector(1 to SCREEN_HEIGHT) := (others => '0');
+signal fb_dina : std_logic_vector(44 downto 0) := (others => '0');
+signal fb_douta : dout;
+signal fb_doutb : dout;
 begin
 
 fpu_cmp_fb_entity : fpu_cmp_fb PORT MAP (
@@ -58,41 +79,93 @@ fpu_cmp_fb_entity : fpu_cmp_fb PORT MAP (
 	 m_axis_result_tdata => fpu_cmp_result
   );
   
+frame_buffer : for I in 1 to SCREEN_HEIGHT generate
+ screen_line : frame_buffer_memory
+  PORT MAP (
+    clka => clk,
+    wea => fb_we(I to I),
+    addra => fb_addra,
+    dina => fb_dina,
+    douta => fb_douta(I),
+    clkb => clk,
+    web => "0",
+    addrb => fb_addrb,
+    dinb => "000000000000000000000000000000000000000000000",
+    doutb => fb_doutb(I)
+  );
+end generate frame_buffer; 
+
 process (clk) is
 variable cur_X : integer :=1;
 variable cur_Y : integer :=1;
-variable frame_buf : frame := (others => (others => (("0000000000000","0000000000000"),x"000000",x"7c00")));
-type state is (CLEAR_BUF,WAIT_FOR_DATA,WAIT_FOR_COMPARISON);
-variable fbstate : state := WAIT_FOR_DATA;
+variable pixel_req,pixel_buf : PIXEL;
+variable draw_color_reg : COLOR24;
+type state is (CLEAR_BUF,WAIT_FOR_DATA,WAIT_FOR_BRAM,COMPARE,WAIT_FOR_COMPARISON);
+variable fbstate : state := CLEAR_BUF;
+variable delay : boolean := false;
 begin
 if rising_edge(clk) then
 	case fbstate is
 		when CLEAR_BUF =>
-			frame_buf(cur_Y)(cur_X) := (("0000000000000","0000000000000"),x"000000",x"7c00");
-			if cur_X = (SCREEN_WIDTH - 1) and cur_Y = (SCREEN_HEIGHT - 1) then
-				fbstate := WAIT_FOR_DATA;
+			fb_dina <= "000000000000000000000000011111000000000000000";
+			fb_addra <= std_logic_vector(to_unsigned(cur_X,10));
+			fb_we <= (others => '1');
+			if delay = true then
+				delay := false;
+				if cur_X = SCREEN_WIDTH then
+					fbstate := WAIT_FOR_DATA;
+					cur_X := 1;
+				end if;
+			else
+				delay := true;
 			end if;
+			cur_Y :=1;
 		when WAIT_FOR_DATA =>
-			if data_in = '1' then
-				fpu_a_data <= pixel_in.depth;				
-				fpu_b_data <= frame_buf(to_integer(pixel_in.position.coord_Y))(to_integer(pixel_in.position.coord_X)).depth;
-				fpu_a_valid <= '1';
-				fpu_b_valid <= '1';
-				fbstate := WAIT_FOR_COMPARISON;
-			end if;
+			fb_we <= (others => '0');
 			pixel_drawn <= '0';
-			rd <= '1';
+			if data_in = '1' then
+				pixel_req := pixel_in;
+				fb_addra <= std_logic_vector(pixel_req.position.coord_X(9 downto 0));
+				fbstate := WAIT_FOR_BRAM;
+			else
+				rd <= '1';
+			end if;
+		when WAIT_FOR_BRAM =>
+				fb_addra <= std_logic_vector(pixel_req.position.coord_X(9 downto 0));
+				fbstate := COMPARE;
+		when COMPARE =>
+			pixel_buf.depth := fb_douta(to_integer(pixel_req.position.coord_Y))(20 downto 5);
+			pixel_buf.color := fb_douta(to_integer(pixel_req.position.coord_Y))(44 downto 21);
+			fpu_a_data <= pixel_req.depth;
+			fpu_b_data <= pixel_buf.depth;
+			fpu_a_valid <= '1';
+			fpu_b_valid <= '1';
+			rd <= '0';
+			fbstate := WAIT_FOR_COMPARISON;
 		when WAIT_FOR_COMPARISON =>
 			if fpu_res_valid ='1' then
 					if fpu_cmp_result(0) = '1' then --a < b
-						frame_buf(to_integer(pixel_in.position.coord_Y))(to_integer(pixel_in.position.coord_X)) := pixel_in;
+						fb_dina(44 downto 21) <= pixel_req.color;
+						fb_dina(20 downto 5) <= pixel_req.depth;
+						fb_addra <= std_logic_vector(pixel_req.position.coord_X(9 downto 0));
+						fb_we(to_integer(pixel_req.position.coord_Y)) <= '1';
 						pixel_drawn <= '1';
+					--	fbstate := WRITE_TO_FB;
+					--else
+						fbstate := WAIT_FOR_DATA;
 					end if;
-				fbstate := WAIT_FOR_DATA;
 			end if;
 			fpu_a_valid <='0';
 			fpu_b_valid <='0';
 			rd <= '0';
+--		when WRITE_TO_FB =>
+--			fb_dina(44 downto 21) <= pixel_req.color;
+--			fb_dina(20 downto 5) <= pixel_req.depth;
+--			fb_addra <= std_logic_vector(pixel_req.position.coord_X(9 downto 0));
+--			fb_we(to_integer(pixel_req.position.coord_Y)) <= '1';
+--			pixel_drawn <= '0';
+--			rd <= '0';
+--			fbstate := WAIT_FOR_DATA;
 	end case;
 	
 	--TODO ADJUST CLOCK FOR VGA
@@ -104,7 +177,6 @@ if rising_edge(clk) then
 			cur_y := 1;
 		end if;
 	end if;
-	
 	if cur_X = 1 then
 		vga_hsync <= '1';
 		if cur_Y = 1 then
@@ -114,9 +186,13 @@ if rising_edge(clk) then
 		vga_vsync <= '0';
 		vga_hsync <= '0';
 	end if;
-	vga_r <= frame_buf(cur_Y)(cur_X).color(23 downto 16);
-	vga_g <= frame_buf(cur_Y)(cur_X).color(15 downto 8);
-	vga_b <= frame_buf(cur_Y)(cur_X).color(7 downto 0);
+	
+	draw_color_reg := fb_doutb(cur_Y)(44 downto 21);
+	fb_addrb <= std_logic_vector(to_unsigned(cur_X+1,10));
+	
+	vga_r <= draw_color_reg(23 downto 16);
+	vga_g <= draw_color_reg(15 downto 8);
+	vga_b <= draw_color_reg(7 downto 0);
 end if;
 end process;
 

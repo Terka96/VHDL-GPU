@@ -16,7 +16,7 @@ entity metrics is
 		pc_fb_data : in std_logic;
 		cu_tex_load_en : in std_logic_vector(1 to CU_COUNT);
 		cu_tex_rd : in std_logic_vector(1 to CU_COUNT);
-		operation : in CU_INTEGERS;
+		operation_number : in CU_INTEGERS;
 		instruction_number : in CU_INTEGERS;
 		pixel_drawn : in std_logic
 	);
@@ -29,7 +29,7 @@ type cu_instruction_distribution is array(1 to CU_COUNT) of instruction_distribu
 type cu_operation_distribution is array(1 to CU_COUNT) of operation_distribution;
 begin
 
-time_series : process (clk,operation,instruction_number) is
+time_series : process (clk) is
 	file file_pointer: text open write_mode is "run_logs/time_series";
 	variable l : line;
 	variable space : string(1 to 1) := " ";
@@ -55,8 +55,8 @@ begin
 		cycles := cycles + 1;
 		for i in 1 to CU_COUNT loop
 			cycles_instruction(i)(instruction_number(i)) := cycles_instruction(i)(instruction_number(i)) + 1;
-			cycles_operation(i)(operation(i)) := cycles_operation(i)(operation(i)) + 1;
-			if last_operations(i) /= operation(i) then last_operations(i) := operation(i); count_operation(i)(operation(i)) := count_operation(i)(operation(i)) + 1; end if;
+			cycles_operation(i)(operation_number(i)) := cycles_operation(i)(operation_number(i)) + 1;
+			if last_operations(i) /= operation_number(i) then last_operations(i) := operation_number(i); count_operation(i)(operation_number(i)) := count_operation(i)(operation_number(i)) + 1; end if;
 			if last_instructions(i) /= instruction_number(i) then last_instructions(i) := instruction_number(i); count_instruction(i)(instruction_number(i)) := count_instruction(i)(instruction_number(i)) + 1; end if;
 			if cu_pc_data(i) = '1' then cycles_cu_waiting_for_pixel_poll(i) := cycles_cu_waiting_for_pixel_poll(i) + 1; end if;
 			if cu_tex_load_en(i) = '1' then cycles_cu_waiting_for_texel(i) := cycles_cu_waiting_for_texel(i) + 1; end if;

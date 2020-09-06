@@ -21,6 +21,7 @@ type INT_COORDS is
      coord_Y			: signed( 12 downto 0 );
   end record;
 
+type operation is ( OP_NOP, OP_FMUL, OP_FDIV, OP_FADD, OP_FSUB, OP_FF2I, OP_FI2F);
 
 type MOD_VERTEX is
   record

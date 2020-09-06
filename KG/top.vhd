@@ -52,7 +52,7 @@ component CU is
 		tex_rd : in std_logic;
 		tex_coord : out INT_COORDS;
 		tex_color : in COLOR24;
-		operation : out integer;
+		operation_number : out integer;
 		instruction_number : out integer
 	);
 end component;
@@ -96,7 +96,7 @@ component metrics is
 		pc_fb_data : in std_logic;
 		cu_tex_load_en : in std_logic_vector(1 to CU_COUNT);
 		cu_tex_rd : in std_logic_vector(1 to CU_COUNT);
-		operation : in CU_INTEGERS;
+		operation_number : in CU_INTEGERS;
 		instruction_number : in CU_INTEGERS;
 		pixel_drawn : in std_logic
 	);
@@ -117,7 +117,7 @@ signal cu_tex_load_en : std_logic_vector(1 to CU_COUNT);
 signal cu_tex_rd : std_logic_vector(1 to CU_COUNT);
 signal tex_color : COLOR24;
 signal pixel_drawn : std_logic;
-signal cu_operation : CU_INTEGERS;
+signal cu_operation_number : CU_INTEGERS;
 signal cu_instruction_number : CU_INTEGERS;
 
 begin
@@ -150,7 +150,7 @@ begin
 		tex_rd => cu_tex_rd(I),
 		tex_coord => cu_tex_coords_sig(I),
 		tex_color => tex_color,
-		operation => cu_operation(I),
+		operation_number => cu_operation_number(I),
 		instruction_number => cu_instruction_number(I)
   );
   end generate CU_BANK_entity;
@@ -189,7 +189,7 @@ begin
 			pc_fb_data => pc_fb_data,
 			cu_tex_load_en => cu_tex_load_en,
 			cu_tex_rd => cu_tex_rd,
-			operation => cu_operation,
+			operation_number => cu_operation_number,
 			instruction_number => cu_instruction_number,
 			pixel_drawn => pixel_drawn
 	);
