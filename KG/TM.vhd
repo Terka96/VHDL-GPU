@@ -28,14 +28,14 @@ begin
 --others => (others => x"ffffff"));
 
   begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
 	   if addr_out /= addr then
 	     addr_out := addr;
 		  rd_out <= '0';
 		else
 		  rd_out <= '1';
 		end if;
-		color <= memory(to_integer(addr.coord_X))(to_integer(addr.coord_Y));
+		color <= memory(to_integer(addr.coord_Y))(to_integer(addr.coord_X));
 	 end if;
   end process;
 

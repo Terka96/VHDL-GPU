@@ -11,7 +11,8 @@ ghdl -i ../../*.vhd
 ghdl -i ../../textures/tb2/texture.vhd
 ghdl -i ../../models/tb2/model_presets.vhd
 #build
-ghdl -m -g -Pxilinxcorelib --warn-unused --ieee=synopsys master_tb
+#note: http://ghdl.free.fr/ghdl/IEEE-library-pitfalls.html
+ghdl -m -g -Pxilinxcorelib --warn-unused --ieee=synopsys -fexplicit master_tb
 #create run directory and symlinks
 DATE=`date '+%Y-%m-%d_%H%M'`
 DIRNAME=../runs/run_${DATE}_tb2${1}
@@ -20,7 +21,7 @@ mkdir $DIRNAME/frames
 ln -s $DIRNAME run_logs
 ln -s $DIRNAME/frames frames
 #RUN
-ghdl -r master_tb --stop-time=5000ms
+ghdl -r master_tb --stop-time=500ms
 #nice parameters: --wave=vga.ghw --disp-tree=inst --stop-time=20000ns
 #make report
 ../plot_graphs.py run_logs/ 

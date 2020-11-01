@@ -5,10 +5,10 @@ public class Converter {
         //String x = "x\""+Integer.toHexString(f32tof16(320.0f) & 0xffff)+"\"";
         //String y = "x\""+Integer.toHexString(f32tof16(-240.0f) & 0xffff)+"\"";
         //System.out.println("X: "+x+" Y: "+y);
-        exportMatrix();
+        //exportMatrix();
         //System.out.println(light_dir_to_norm(new Point3f(2.0f,0.5f,0.5f)));
         //exportbmp("tex_tb2.png",512);
-        //exportObj("cube.obj");
+        exportObj("furniture.obj");
 
     }
 
@@ -72,12 +72,17 @@ public class Converter {
             String v3tu = floatToStr(t.getVertices()[2].uvmap.x);
             String v3tv = floatToStr(t.getVertices()[2].uvmap.y);
 
-            String line = String.format("((%s,%s,%s,%s,%s,%s,%s,%s)," +
-                                        " (%s,%s,%s,%s,%s,%s,%s,%s)," +
-                                        " (%s,%s,%s,%s,%s,%s,%s,%s)),",
+            String line = String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s),",
                                         v1gx,v1gy,v1gz,v1nx,v1ny,v1nz,v1tu,v1tv,
                                         v2gx,v2gy,v2gz,v2nx,v2ny,v2nz,v2tu,v2tv,
                                         v3gx,v3gy,v3gz,v3nx,v3ny,v3nz,v3tu,v3tv);
+
+            //String line = String.format("((%s,%s,%s,%s,%s,%s,%s,%s)," +
+            //                            " (%s,%s,%s,%s,%s,%s,%s,%s)," +
+            //                            " (%s,%s,%s,%s,%s,%s,%s,%s)),",
+            //                            v1gx,v1gy,v1gz,v1nx,v1ny,v1nz,v1tu,v1tv,
+            //                            v2gx,v2gy,v2gz,v2nx,v2ny,v2nz,v2tu,v2tv,
+            //                            v3gx,v3gy,v3gz,v3nx,v3ny,v3nz,v3tu,v3tv);
 
             System.out.println(line);
         }

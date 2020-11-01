@@ -1,0 +1,15 @@
+# Output products list for <fb_memory>
+_xmsgs/pn_parser.xmsgs
+fb_memory/blk_mem_gen_v7_3_readme.txt
+fb_memory/doc/blk_mem_gen_v7_3_vinfo.html
+fb_memory/doc/pg058-blk-mem-gen.pdf
+fb_memory.asy
+fb_memory.gise
+fb_memory.ngc
+fb_memory.vhd
+fb_memory.vho
+fb_memory.xco
+fb_memory.xise
+fb_memory_flist.txt
+fb_memory_xmdf.tcl
+summary.log

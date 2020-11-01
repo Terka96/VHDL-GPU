@@ -1,5 +1,5 @@
 The following files were generated for 'fpu_add' in directory
-/home/terka/Documents/Studia/KG/ipcore_dir/
+/home/terka/Documents/Studia/VHDL-GPU/KG/ipcore_dir/
 
 Generate XCO file:
    CORE Generator input file containing the parameters used to generate a core.

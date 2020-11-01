@@ -24,7 +24,7 @@ end metrics;
 
 architecture Behavioral of metrics is
 type instruction_distribution is array(0 to END_PROGRAMME) of integer;
-type operation_distribution is array(0 to 15) of integer;
+type operation_distribution is array(0 to 20) of integer;
 type cu_instruction_distribution is array(1 to CU_COUNT) of instruction_distribution;
 type cu_operation_distribution is array(1 to CU_COUNT) of operation_distribution;
 begin

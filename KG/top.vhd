@@ -14,7 +14,19 @@ entity top is
 		vga_clk : out std_logic;
 		vga_r : out std_logic_vector( 7 downto 0 );
 		vga_g : out std_logic_vector( 7 downto 0 );
-		vga_b : out std_logic_vector( 7 downto 0 )
+		vga_b : out std_logic_vector( 7 downto 0 );
+		
+		--data for metrics
+		metr_cu_rd : out std_logic_vector(1 to CU_COUNT);
+		metr_cu_ce : out std_logic_vector(1 to CU_COUNT);
+		metr_fb_rd : out std_logic;
+		metr_cu_pc_data : out std_logic_vector(1 to CU_COUNT);
+		metr_pc_fb_data : out std_logic;
+		metr_cu_tex_load_en : out std_logic_vector(1 to CU_COUNT);
+		metr_cu_tex_rd : out std_logic_vector(1 to CU_COUNT);
+		metr_operation_number : out CU_INTEGERS;
+		metr_instruction_number : out CU_INTEGERS;
+		metr_pixel_drawn : out std_logic
 	);
 end top;
 
@@ -42,7 +54,7 @@ end component;
 component CU is
 	port(
 		clk : in std_logic;	--system clock
-		data_in : in MOD_TRIANGLE;
+		mod_triangle_in : in MOD_TRIANGLE;
 		rd : out std_logic;
 		ce : in std_logic;
 		pixel_out : out PIXEL;
@@ -86,22 +98,6 @@ component FB is
 			);
 end component;
 
-component metrics is
-	port(
-		clk : in std_logic;	--system clock
-		cu_rd : in std_logic_vector(1 to CU_COUNT);
-		cu_ce : in std_logic_vector(1 to CU_COUNT);
-		fb_rd : in std_logic;
-		cu_pc_data : in std_logic_vector(1 to CU_COUNT);
-		pc_fb_data : in std_logic;
-		cu_tex_load_en : in std_logic_vector(1 to CU_COUNT);
-		cu_tex_rd : in std_logic_vector(1 to CU_COUNT);
-		operation_number : in CU_INTEGERS;
-		instruction_number : in CU_INTEGERS;
-		pixel_drawn : in std_logic
-	);
-end component;
-
 signal data : MOD_TRIANGLE;
 signal cu_rd : std_logic_vector(1 to CU_COUNT);
 signal cu_ce : std_logic_vector(1 to CU_COUNT);
@@ -140,7 +136,7 @@ begin
 		for I in 1 to CU_COUNT generate
 		CUX : CU port map(
 		clk => clk,
-		data_in => data,
+		mod_triangle_in => data,
 		rd => cu_rd(I),
 		ce => cu_ce(I),
 		pixel_out => cu_pc_pixel(I),
@@ -180,19 +176,16 @@ begin
 			vga_b => vga_b
 		);
 		
-	metrics_entity : metrics port map(
-			clk => clk,
-			cu_rd => cu_rd,
-			cu_ce => cu_ce,
-			fb_rd => fb_rd,
-			cu_pc_data => cu_pc_data,
-			pc_fb_data => pc_fb_data,
-			cu_tex_load_en => cu_tex_load_en,
-			cu_tex_rd => cu_tex_rd,
-			operation_number => cu_operation_number,
-			instruction_number => cu_instruction_number,
-			pixel_drawn => pixel_drawn
-	);
+		metr_cu_rd <= cu_rd;
+		metr_cu_ce <=cu_ce;
+		metr_fb_rd <= fb_rd;
+		metr_cu_pc_data <= cu_pc_data;
+		metr_pc_fb_data <= pc_fb_data;
+		metr_cu_tex_load_en <= cu_tex_load_en;
+		metr_cu_tex_rd <= cu_tex_rd;
+		metr_operation_number <= cu_operation_number;
+		metr_instruction_number <= cu_instruction_number;
+		metr_pixel_drawn <= pixel_drawn;
 
 end Behavioral;
 

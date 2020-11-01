@@ -22,108 +22,15 @@
   <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="karta.xise"/>
 
   <files xmlns="http://www.xilinx.com/XMLSchema">
-    <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
-    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
-    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
-    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="master_tb_beh.prj"/>
-    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="master_tb_isim_beh.exe"/>
-    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="master_tb_isim_beh.wdb"/>
-    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_add.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_cmp_fb.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_div.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_f2i.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_i2f.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_SYMBOL" xil_pn:name="ipcore_dir/fpu_mul.sym" xil_pn:origination="imported"/>
+    <file xil_pn:fileType="FILE_NCD" xil_pn:name="top_guide.ncd" xil_pn:origination="imported"/>
   </files>
 
-  <transforms xmlns="http://www.xilinx.com/XMLSchema">
-    <transform xil_pn:end_ts="1599404576" xil_pn:in_ck="4266951039864217482" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1599404576">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="CU.vhd"/>
-      <outfile xil_pn:name="D.vhd"/>
-      <outfile xil_pn:name="FB.vhd"/>
-      <outfile xil_pn:name="GS.vhd"/>
-      <outfile xil_pn:name="MM.vhd"/>
-      <outfile xil_pn:name="PC.vhd"/>
-      <outfile xil_pn:name="TM.vhd"/>
-      <outfile xil_pn:name="TP.vhd"/>
-      <outfile xil_pn:name="definitions.vhd"/>
-      <outfile xil_pn:name="fpu.vhd"/>
-      <outfile xil_pn:name="master_tb.vhd"/>
-      <outfile xil_pn:name="metrics.vhd"/>
-      <outfile xil_pn:name="models/default/model_presets.vhd"/>
-      <outfile xil_pn:name="textures/default/texture.vhd"/>
-      <outfile xil_pn:name="top.vhd"/>
-      <outfile xil_pn:name="vga_tb.vhd"/>
-    </transform>
-    <transform xil_pn:end_ts="1599399031" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="511758968302477700" xil_pn:start_ts="1599399031">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1599399031" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="4079682836923253512" xil_pn:start_ts="1599399031">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1599399031" xil_pn:in_ck="1041874805883921885" xil_pn:name="TRAN_regenerateCoresSim" xil_pn:prop_ck="-2638255696392449070" xil_pn:start_ts="1599399031">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_add.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_add.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_cmp_fb.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_cmp_fb.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_div.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_div.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_f2i.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_f2i.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_i2f.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_i2f.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_mul.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_mul.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/frame_buffer_memory.ngc"/>
-      <outfile xil_pn:name="ipcore_dir/frame_buffer_memory.vhd"/>
-    </transform>
-    <transform xil_pn:end_ts="1599404576" xil_pn:in_ck="6341428391922138910" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1599404576">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="CU.vhd"/>
-      <outfile xil_pn:name="D.vhd"/>
-      <outfile xil_pn:name="FB.vhd"/>
-      <outfile xil_pn:name="GS.vhd"/>
-      <outfile xil_pn:name="MM.vhd"/>
-      <outfile xil_pn:name="PC.vhd"/>
-      <outfile xil_pn:name="TM.vhd"/>
-      <outfile xil_pn:name="TP.vhd"/>
-      <outfile xil_pn:name="definitions.vhd"/>
-      <outfile xil_pn:name="fpu.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_add.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_cmp_fb.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_div.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_f2i.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_i2f.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/fpu_mul.vhd"/>
-      <outfile xil_pn:name="ipcore_dir/frame_buffer_memory.vhd"/>
-      <outfile xil_pn:name="master_tb.vhd"/>
-      <outfile xil_pn:name="metrics.vhd"/>
-      <outfile xil_pn:name="models/default/model_presets.vhd"/>
-      <outfile xil_pn:name="textures/default/texture.vhd"/>
-      <outfile xil_pn:name="top.vhd"/>
-      <outfile xil_pn:name="vga_tb.vhd"/>
-    </transform>
-    <transform xil_pn:end_ts="1599404579" xil_pn:in_ck="-7124971932408744089" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-320994468594685154" xil_pn:start_ts="1599404576">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="fuse.log"/>
-      <outfile xil_pn:name="isim"/>
-      <outfile xil_pn:name="master_tb_beh.prj"/>
-      <outfile xil_pn:name="master_tb_isim_beh.exe"/>
-      <outfile xil_pn:name="xilinxsim.ini"/>
-    </transform>
-    <transform xil_pn:end_ts="1599404579" xil_pn:in_ck="3874038045587663248" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-8475038454747856524" xil_pn:start_ts="1599404579">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="isim.cmd"/>
-      <outfile xil_pn:name="master_tb_isim_beh.wdb"/>
-    </transform>
-    <transform xil_pn:name="TRAN_SubProjectAbstractToPreProxy">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-  </transforms>
+  <transforms xmlns="http://www.xilinx.com/XMLSchema"/>
 
 </generated_project>

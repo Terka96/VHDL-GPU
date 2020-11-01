@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 14.7
-# Date: Tue Aug 11 17:11:08 2020
+# Date: Sat Oct 31 13:06:09 2020
 #
 ##############################################################
 #
@@ -22,13 +22,13 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc7z020
+SET device = xc7z030
 SET devicefamily = zynq
 SET flowvendor = Other
 SET formalverification = false
 SET foundationsym = false
 SET implementationfiletype = Ngc
-SET package = clg400
+SET package = fbg676
 SET removerpms = false
 SET simulationfiles = Behavioral
 SET speedgrade = -3
@@ -78,4 +78,4 @@ CSET result_tlast_behv=Null
 MISC pkg_timestamp=2013-07-22T10:46:33Z
 # END Extra information
 GENERATE
-# CRC: 8ad68fae
+# CRC: 505aa4dc

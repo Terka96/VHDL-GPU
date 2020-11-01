@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="fpu_f2i">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2020-8-17T12:50:12</timestamp>
+    <timestamp>2020-10-31T13:4:53</timestamp>
     <pin polarity="Input" x="0" y="80" name="s_axis_a_tvalid" />
     <pin polarity="Input" x="0" y="144" name="s_axis_a_tdata[15:0]" />
     <pin polarity="Input" x="0" y="656" name="aclk" />

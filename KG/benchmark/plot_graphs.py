@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #params
-cu = 1
-inst = 160 #161 + 1 #143+1
+cu = 10
+inst = 160#144 #160 #161 + 1 #143+1
 oper = 16
 
 import matplotlib.pyplot as plt
@@ -64,7 +64,7 @@ while (not(line == '' or (stopat != '' and timesample > 2*int(stopat)))):
 ts.close()
 
 #too much samples group them!
-group=50 #1 sample will be 25ms = 1250000cycles
+group=2 #1 sample will be 10ms = 500000cycles
 grouped_cuu = []
 grouped_gp = [sum(generated_pixels[i:i+group]) for i in range(0, len(generated_pixels), group)]   
 grouped_dp = [sum(drawn_pixels[i:i+group]) for i in range(0, len(drawn_pixels), group)]   
@@ -75,32 +75,59 @@ for j in range(cu):
 timeline = [int(i/2) for i in range(0,timesample, group)]
 
 #plot
-plt.bar(range(inst),[x/1000000 for x in count_instruction], color = 'blue')
-plt.savefig(workingdir+"count_instructions.png",dpi=3000) 
+plt.bar(range(inst),[x/100000000 for x in count_instruction], color = 'blue')
+plt.xlabel('instrukcja')
+plt.ylabel('liczba wywołań $10^6$')
+plt.title('Wywołania instrukcji')
+plt.savefig(workingdir+"count_instructions.png",dpi=1000) 
 plt.close()
 plt.bar(range(inst),[x/1000000 for x in cycles_instruction], color = 'green')
-plt.savefig(workingdir+"cycles_instructions.png",dpi=3000)
+plt.xlabel('instrukcja')
+plt.ylabel('liczba cykli zegarowych  $10^6$')
+plt.title('Cykle spędzone na obsłudze instrukcji')
+plt.savefig(workingdir+"cycles_instructions.png",dpi=1000)
 plt.close()
-plt.bar(range(oper),[x/1000000 for x in count_operation], color = 'blue')
-plt.savefig(workingdir+"count_operations.png",dpi=3000)
+plt.bar(range(oper),[x/100000000 for x in count_operation], color = 'blue')
+plt.xlabel('operacja')
+plt.ylabel('liczba wywołań $10^6$')
+plt.title('Wywołania operacji')
+plt.savefig(workingdir+"count_operations.png",dpi=1000)
 plt.close()
 plt.bar(range(oper),[x/1000000 for x in cycles_operation], color = 'green')
-plt.savefig(workingdir+"cycles_operations.png",dpi=3000)
+plt.xlabel('instrukcja')
+plt.ylabel('liczba cykli zegarowych $10^6$')
+plt.title('Cykle spędzone na obsłudze operacji')
+plt.savefig(workingdir+"cycles_operations.png",dpi=1000)
 plt.close()
 
 
-plt.plot(timeline,grouped_gp, color = 'green')
-plt.plot(timeline,grouped_dp, color = 'blue')
-plt.plot(timeline,grouped_pt, color = 'red')
-plt.savefig(workingdir+"pixels.png",dpi=3000)
+plt.plot(timeline,grouped_gp, color = 'green',label='wygenerowane piksele')
+plt.plot(timeline,grouped_dp, color = 'blue',label='narysowane piksele')
+plt.plot(timeline,grouped_pt, color = 'red',label='pobrane teksele')
+plt.xlabel('czas symulacji [ms]')
+plt.ylabel('ilość przetworzonych pikseli na jedną milisekundę')
+plt.title('Przetwarzanie pikseli')
+plt.ylim(bottom=0)
+plt.xlim(left=0)
+plt.legend(loc='upper right', shadow=True)
+plt.savefig(workingdir+"pixels.png",dpi=1000)
 plt.close()
 
 
-colors=['red','green','blue','orange','pink','yellow','gray','lime','red','green']
-plt.plot(timeline,grouped_fbu, color = 'purple')
+#colors=['red','green','blue','orange','pink','yellow','gray','lime','red','green']
+plt.plot(timeline,grouped_fbu, color = 'red',label='FB')
 for i in range(cu):
-	plt.plot(timeline,grouped_cuu[i], color = colors[i])
-plt.savefig(workingdir+"utilization.png",dpi=3000)
+	if i == 0:
+		plt.plot(timeline,grouped_cuu[i], color = 'orange',label='CU 1..'+str(cu))
+	else:
+		plt.plot(timeline,grouped_cuu[i], color = 'orange')
+plt.xlabel('czas symulacji [ms]')
+plt.ylabel('Wykorzystanie modułu')
+plt.title('Wykorzystanie CU i FB')
+plt.ylim(bottom=0)
+plt.xlim(left=0)
+plt.legend(loc='lower left', shadow=True)
+plt.savefig(workingdir+"utilization.png",dpi=1000)
 plt.close()
 
 stat = open(workingdir+"stat.txt","w")

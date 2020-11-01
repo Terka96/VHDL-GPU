@@ -21,47 +21,344 @@ type INT_COORDS is
      coord_Y			: signed( 12 downto 0 );
   end record;
 
-type operation is ( OP_NOP, OP_FMUL, OP_FDIV, OP_FADD, OP_FSUB, OP_FF2I, OP_FI2F);
 
-type MOD_VERTEX is
+subtype register_addr is integer range 1 to 128;
+
+type operation is ( OP_W4D, OP_NOP, OP_FMUL, OP_FDIV, OP_FADD, OP_FSUB, OP_FF2I, OP_FI2F, OP_FJLT0, OP_FMAX0, OP_MIN, OP_MAX, OP_INC, OP_JGT, OP_MOV, OP_TEX, OP_SH, OP_OUT, OP_JUMP, OP_LDM);
+
+type instruction is
   record
-     geom_X				: FLOAT16;
-     geom_Y				: FLOAT16;
-     geom_Z				: FLOAT16;
-     norm_X				: FLOAT16;
-     norm_Y				: FLOAT16;
-     norm_Z				: FLOAT16;
-     tex_U				: FLOAT16;
-     tex_V				: FLOAT16;
+  	op					: operation;
+  	sc					: integer range 0 to 15;
+   	regA				: register_addr;
+  	regB				: register_addr;
+   	JWB					: integer range 0 to 512;
   end record;
+  
+--JUMP LABELS
+constant WAIT_FOR_DATA : integer :=				1;
+constant BEGIN_FORY : integer := 				220;
+constant BEGIN_FORX : integer := 				224;
+constant CONTINUE_FORX : integer :=				270;
+constant CONTINUE_FORY : integer :=				275;
+constant END_PROGRAMME : integer :=				281;
+  
+type programme is array(1 to 281) of instruction;
+
+constant cu_programme : programme :=(
+--PIERWSZY WIERZCHOLEK:
+(OP_W4D,0,1,1,1),		--WAIT_FOR_DATA
+(OP_LDM,0,1,1,49),		--LOAD_TRIANGLE_TO_REGISTERS
+(OP_LDM,0,2,1,50),
+(OP_LDM,0,3,1,51),
+(OP_LDM,0,4,1,52),
+(OP_LDM,0,5,1,53),
+(OP_LDM,0,6,1,54),
+(OP_LDM,0,7,1,55),
+(OP_LDM,0,8,1,56),
+(OP_LDM,0,9,1,57),
+(OP_LDM,0,10,1,58),
+(OP_LDM,0,11,1,59),
+(OP_LDM,0,12,1,60),
+(OP_LDM,0,13,1,61),
+(OP_LDM,0,14,1,62),
+(OP_LDM,0,15,1,63),
+(OP_LDM,0,16,1,64),
+(OP_LDM,0,17,1,65),
+(OP_LDM,0,18,1,66),
+(OP_LDM,0,19,1,67),
+(OP_LDM,0,20,1,68),
+(OP_LDM,0,21,1,69),
+(OP_LDM,0,22,1,70),
+(OP_LDM,0,23,1,71),
+(OP_LDM,0,24,1,72),
+(OP_FMUL,0,96,49,1),
+(OP_FMUL,0,97,50,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,98,51,2),
+(OP_FADD,0,1,2,1),
+(OP_FADD,0,99,1,30),	--v1W
+(OP_FMUL,0,84,49,2),
+(OP_FMUL,0,85,50,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,86,51,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,87,2,2),
+(OP_FDIV,0,2,30,2),
+(OP_FMUL,0,2,100,2),
+(OP_FADD,0,2,100,27),	--v1X
+(OP_FMUL,0,88,49,2),
+(OP_FMUL,0,89,50,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,90,51,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,91,2,2),
+(OP_FDIV,0,2,30,2),
+(OP_FMUL,0,101,102,3),
+(OP_FMUL,0,2,3,2),
+(OP_FADD,0,2,101,24),	--v1Y
+(OP_FMUL,0,92,49,2),
+(OP_FMUL,0,93,50,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,94,51,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,95,2,2),
+(OP_FDIV,0,2,30,21),	--v1Z
+(OP_FMUL,0,52,103,4),
+(OP_FMUL,0,4,104,4),
+(OP_FMUL,0,53,103,5),
+(OP_FMUL,0,5,105,5),
+(OP_FADD,0,4,5,4),
+(OP_FMUL,0,54,103,5),
+(OP_FMUL,0,5,106,5),
+(OP_FADD,0,4,5,4),
+(OP_FMAX0,0,4,1,18),	--v1L	DRUGI WIERZCHOLEK:
+(OP_FMUL,0,96,57,1),
+(OP_FMUL,0,97,58,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,98,59,2),
+(OP_FADD,0,1,2,1),
+(OP_FADD,0,99,1,29),	--v2W
+(OP_FMUL,0,84,57,2),
+(OP_FMUL,0,85,58,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,86,59,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,87,2,2),
+(OP_FDIV,0,2,29,2),
+(OP_FMUL,0,2,100,2),
+(OP_FADD,0,2,100,26),	--v2X
+(OP_FMUL,0,88,57,2),
+(OP_FMUL,0,89,58,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,90,59,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,91,2,2),
+(OP_FDIV,0,2,29,2),
+(OP_FMUL,0,101,102,3),
+(OP_FMUL,0,2,3,2),
+(OP_FADD,0,2,101,23),	--v2Y
+(OP_FMUL,0,92,57,2),
+(OP_FMUL,0,93,58,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,94,59,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,95,2,2),
+(OP_FDIV,0,2,29,20),	--v2Z
+(OP_FMUL,0,60,103,4),
+(OP_FMUL,0,4,104,4),
+(OP_FMUL,0,61,103,5),
+(OP_FMUL,0,5,105,5),
+(OP_FADD,0,4,5,4),
+(OP_FMUL,0,62,103,5),
+(OP_FMUL,0,5,106,5),
+(OP_FADD,0,4,5,4),
+(OP_FMAX0,0,4,1,17),	--v2L	TRZECI WIERZCHOLEK:
+(OP_FMUL,0,96,65,1),
+(OP_FMUL,0,97,66,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,98,67,2),
+(OP_FADD,0,1,2,1),
+(OP_FADD,0,99,1,28),	--v3W
+(OP_FMUL,0,84,65,2),
+(OP_FMUL,0,85,66,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,86,67,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,87,2,2),
+(OP_FDIV,0,2,28,2),
+(OP_FMUL,0,2,100,2),
+(OP_FADD,0,2,100,25),	--v3X
+(OP_FMUL,0,88,65,2),
+(OP_FMUL,0,89,66,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,90,67,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,91,2,2),
+(OP_FDIV,0,2,28,2),
+(OP_FMUL,0,101,102,3),
+(OP_FMUL,0,2,3,2),
+(OP_FADD,0,2,101,22),	--v3Y
+(OP_FMUL,0,92,65,2),
+(OP_FMUL,0,93,66,3),
+(OP_FADD,0,2,3,2),
+(OP_FMUL,0,94,67,3),
+(OP_FADD,0,2,3,2),
+(OP_FADD,0,95,2,2),
+(OP_FDIV,0,2,28,19),	--v3Z
+(OP_FMUL,0,68,103,4),
+(OP_FMUL,0,4,104,4),
+(OP_FMUL,0,69,103,5),
+(OP_FMUL,0,5,105,5),
+(OP_FADD,0,4,5,4),
+(OP_FMUL,0,70,103,5),
+(OP_FMUL,0,5,106,5),
+(OP_FADD,0,4,5,4),
+(OP_FMAX0,0,4,1,16),	--v3L	RZUTOWANIA:
+(OP_FF2I,0,27,1,82),
+(OP_FF2I,0,26,1,81),
+(OP_FF2I,0,25,1,80),
+(OP_FF2I,0,24,1,79),
+(OP_FF2I,0,23,1,78),
+(OP_FF2I,0,22,1,77),	--PARAMETRY DZIELENIE PRZEZ W:
+(OP_FDIV,0,21,30,21),
+(OP_FDIV,0,20,29,20),
+(OP_FDIV,0,19,28,19),
+(OP_FDIV,0,18,30,18),
+(OP_FDIV,0,17,29,17),
+(OP_FDIV,0,16,28,16),
+(OP_FDIV,0,55,30,15),
+(OP_FDIV,0,63,29,14),
+(OP_FDIV,0,71,28,13),
+(OP_FDIV,0,56,30,12),
+(OP_FDIV,0,64,29,11),
+(OP_FDIV,0,72,28,10),	--ODWROTNOSCI W:
+(OP_FDIV,0,107,30,30),
+(OP_FDIV,0,107,29,29),
+(OP_FDIV,0,107,28,28),	--BOUNDING BOX:
+(OP_MIN,0,82,81,76),
+(OP_MIN,0,76,80,76),
+(OP_MIN,0,78,79,75),
+(OP_MIN,0,75,77,75),
+(OP_MAX,0,82,81,74),
+(OP_MAX,0,74,80,74),
+(OP_MAX,0,78,79,73),
+(OP_MAX,0,73,77,73),
+(OP_MIN,0,109,73,73),
+(OP_MIN,0,108,74,74),
+(OP_MAX,0,111,75,75),
+(OP_MAX,0,111,76,76),
+(OP_MOV,0,76,1,83),  --AREA:
+(OP_FSUB,0,25,27,1),
+(OP_FSUB,0,23,24,2),
+(OP_FMUL,0,1,2,1),
+(OP_FSUB,0,22,24,2),
+(OP_FSUB,0,26,27,3),
+(OP_FMUL,0,2,3,2),
+(OP_FSUB,0,1,2,31),
+(OP_FJLT0,0,31,1,END_PROGRAMME),	--WSPOLRZEDNE BARYCENTRYCZNE DLA (minX,minY):
+(OP_FI2F,0,76,1,9),
+(OP_FI2F,0,75,1,8),
+(OP_FSUB,0,9,26,1),
+(OP_FSUB,0,22,23,2),
+(OP_FMUL,0,1,2,1),
+(OP_FSUB,0,8,23,2),
+(OP_FSUB,0,25,26,3),
+(OP_FMUL,0,2,3,2),
+(OP_FSUB,0,1,2,32),
+(OP_FSUB,0,9,25,1),
+(OP_FSUB,0,24,22,2),
+(OP_FMUL,0,1,2,1),
+(OP_FSUB,0,8,22,2),
+(OP_FSUB,0,27,25,3),
+(OP_FMUL,0,2,3,2),
+(OP_FSUB,0,1,2,33),
+(OP_FSUB,0,9,27,1),
+(OP_FSUB,0,23,24,2),
+(OP_FMUL,0,1,2,1),
+(OP_FSUB,0,8,24,2),
+(OP_FSUB,0,26,27,3),
+(OP_FMUL,0,2,3,2),
+(OP_FSUB,0,1,2,34),		--DELTY BARYCENTRYCZNE:
+(OP_FSUB,0,22,23,40),
+(OP_FSUB,0,24,22,42),
+(OP_FSUB,0,23,24,44),
+(OP_FSUB,0,26,25,41),
+(OP_FSUB,0,25,27,43),
+(OP_FSUB,0,27,26,45),	--FORKI:
+(OP_JGT,0,75,73,END_PROGRAMME),					--BEGIN_FORY
+(OP_MOV,0,32,1,46),
+(OP_MOV,0,33,1,47),
+(OP_MOV,0,34,1,48),
+(OP_JGT,0,76,74,CONTINUE_FORY),					--BEGIN_FORX
+(OP_FJLT0,0,46,1,CONTINUE_FORX),
+(OP_FJLT0,0,47,1,CONTINUE_FORX),
+(OP_FJLT0,0,48,1,CONTINUE_FORX),	--NORMALIZACJA WSPOLRZEDNYCH BARYCENTRYCZNYCH:
+(OP_FDIV,0,46,31,5),
+(OP_FDIV,0,47,31,6),
+(OP_FDIV,0,48,31,7),	--INTERPOLACJE:
+(OP_FMUL,0,5,30,1),
+(OP_FMUL,0,6,29,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,7,28,2),
+(OP_FADD,0,1,2,1),
+(OP_FDIV,0,107,1,35),	--W
+(OP_FMUL,0,5,15,1),
+(OP_FMUL,0,6,14,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,7,13,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,35,1,36),	--TU
+(OP_FMUL,0,5,12,1),
+(OP_FMUL,0,6,11,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,7,10,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,35,1,37),	--TV
+(OP_FMUL,0,5,18,1),
+(OP_FMUL,0,6,17,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,7,16,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,35,1,38),	--L
+(OP_FMUL,0,5,21,1),
+(OP_FMUL,0,6,20,2),
+(OP_FADD,0,1,2,1),
+(OP_FMUL,0,7,19,2),
+(OP_FADD,0,1,2,1),
+(OP_FDIV,0,107,1,39),	--Z		SKALOWANIE I RZUTOWANIE:
+(OP_FMUL,0,36,110,36),
+(OP_FMUL,0,37,102,1),
+(OP_FMUL,0,1,110,37),
+(OP_FF2I,0,36,1,36),
+(OP_FF2I,0,37,1,37),
+(OP_FF2I,0,38,1,38),
+(OP_TEX,0,36,37,1),
+(OP_SH,0,76,75,1),
+(OP_OUT,0,1,1,1),
+(OP_FADD,0,46,40,46),					--CONTINUE_FORX
+(OP_FADD,0,47,42,47),
+(OP_FADD,0,48,44,48),
+(OP_INC,0,76,1,76),
+(OP_JUMP,0,1,1,BEGIN_FORX),
+(OP_FADD,0,32,41,32),					--CONTINUE_FORY
+(OP_FADD,0,33,43,33),
+(OP_FADD,0,34,45,34),
+(OP_MOV,0,83,1,76),
+(OP_INC,0,75,1,75),
+(OP_JUMP,0,1,1,BEGIN_FORY),
+(OP_JUMP,0,1,1,WAIT_FOR_DATA)			--END_PROGRAMME
+);
+
+
+--type MOD_VERTEX is
+--  record
+--     geom_X				: FLOAT16;
+--     geom_Y				: FLOAT16;
+--     geom_Z				: FLOAT16;
+--     norm_X				: FLOAT16;
+--     norm_Y				: FLOAT16;
+--     norm_Z				: FLOAT16;
+--     tex_U				: FLOAT16;
+--     tex_V				: FLOAT16;
+--  end record;
 
 type PIXEL is
   record
-	  position			: INT_COORDS;
+	 position			: INT_COORDS;
      color				: COLOR24;
      depth				: FLOAT16;
   end record;
 
-type MOD_TRIANGLE is array (1 to 3) of MOD_VERTEX;
+type MOD_TRIANGLE is array(1 to 24) of FLOAT16;
 type CU_PIXELS is array (1 to CU_COUNT) of PIXEL;
 type CU_TEX_COORDS is array (1 to CU_COUNT) of INT_COORDS;
 type CU_INTEGERS is array (1 to CU_COUNT) of integer;
 
---JUMP LABELS
-constant BEGIN_GEOMETRY : integer :=			1;
-constant BEGIN_FORY : integer := 				102;
-constant BEGIN_FORX : integer := 				104;
-constant WAIT_FOR_TEXEL : integer :=			148;
-constant WAIT_FOR_DATA_POLL : integer := 		150;
-constant CONTINUE_FORX : integer :=				151;
-constant CONTINUE_FORY : integer :=				155;
-constant END_PROGRAMME : integer :=				159;
 
-constant empty_m_tri : mod_triangle := ( 
-(geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000"), 
-(geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000"), 
-(geom_X => x"0000", geom_Y => x"0000", geom_Z => x"0000", norm_X => x"0000", norm_Y => x"0000", norm_Z => x"0000", tex_U => x"0000", tex_V => x"0000")
-);
+constant empty_m_tri : mod_triangle := ( x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", 
+ x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000",
+ x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000", x"0000");
 
 
 function to_char(value : std_logic_vector(3 downto 0)) return character;

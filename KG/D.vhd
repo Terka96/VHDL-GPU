@@ -11,7 +11,7 @@ entity D is
 			clk : in std_logic; --system clock
 			data_out : out MOD_TRIANGLE;
 			cu_rd : in std_logic_vector(1 to CU_COUNT);
-			cu_ce : out std_logic_vector(1 to CU_COUNT)
+			cu_ce : out std_logic_vector(1 to CU_COUNT) := (others => '0')
 			);
 end D;
 

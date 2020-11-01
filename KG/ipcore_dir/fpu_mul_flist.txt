@@ -7,6 +7,7 @@ fpu_mul/cmodel/floating_point_v6_1_bitacc_cmodel_nt64.zip
 fpu_mul.asy
 fpu_mul.gise
 fpu_mul.ngc
+fpu_mul.sym
 fpu_mul.vhd
 fpu_mul.vho
 fpu_mul.xco

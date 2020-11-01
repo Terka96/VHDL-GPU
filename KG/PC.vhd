@@ -3,6 +3,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
 use work.definitions.all;
 
 entity PC is
@@ -30,7 +31,10 @@ if rising_edge(clk) then
 			i := 1;
 		end if;
 		if cu_data_in(i) = '1' then
-			fb_pixel_out <= cu_pixel_in(i);
+			fb_pixel_out.position.coord_X <= cu_pixel_in(i).position.coord_X - 1;
+			fb_pixel_out.position.coord_Y <= cu_pixel_in(i).position.coord_Y - 1;
+			fb_pixel_out.color <= cu_pixel_in(i).color;
+			fb_pixel_out.depth <= cu_pixel_in(i).depth;
 			fb_data_out <= '1';
 			pixel_read(i) <= '1';
 		end if;
